@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Shared Taxi Together</string>
+    <string name="signUpString">아직 회원이 아니신가요?</string>
+    <string name="findPasswdString">비밀번호를 잊으셨나요?</string>
+
 </resources>
