@@ -36,7 +36,12 @@
 ## 3. 아키텍처
 <img src="/images/architecture.png">  
 
-## 4. 기술 스택
+## 4. DB
+ERD링크  
+<https://www.erdcloud.com/p/MbSBHpXXXH9kW6SLj>
+
+
+## 5. 기술 스택
 
 |분류|기술
 |---|-----|
@@ -47,7 +52,7 @@
 
   
 
-## 5. 팀원
+## 6. 팀원
 
 | Name    | 이지윤                                  | 윤채림                                      |
 | ------- | -------------------------------------- | ------------------------------------------- | 
@@ -56,7 +61,7 @@
 | Github  | [@wldsbs](https://github.com/wldsbs) | [@crimii112](https://github.com/crimii112) |
 
   
-## 6. Git 규칙
+## 7. Git 규칙
 
 ### 커밋 메시지
 ```
