@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "697955144610",
+    "project_id": "share-taxi-dd8af",
+    "storage_bucket": "share-taxi-dd8af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697955144610:android:47ba4ab83c73f29b5cd8fb",
+        "android_client_info": {
+          "package_name": "com.example.sharedtaxitogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697955144610-91veu4j2ffla7k237dsmsopnl73bnrir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3C6SCo2DTOC4ubPv0mtnjk98XftywhVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697955144610-91veu4j2ffla7k237dsmsopnl73bnrir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

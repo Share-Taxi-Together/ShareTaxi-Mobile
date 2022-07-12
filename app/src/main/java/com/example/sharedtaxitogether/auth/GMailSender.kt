@@ -1,4 +1,4 @@
-package com.example.sharedtaxitogether.mailAuth
+package com.example.sharedtaxitogether.auth
 
 import com.example.sharedtaxitogether.BuildConfig
 import kotlinx.coroutines.CoroutineScope
@@ -47,7 +47,8 @@ class GMailSender: Authenticator() {
             message.sender = InternetAddress(fromEmail)                              // 보내는 사람 설정
             message.addRecipient(Message.RecipientType.TO, InternetAddress(toEmail)) // 받는 사람 설정
             message.subject = "[쉐어택시] 이메일 인증번호 안내"                                     // 이메일 제목
-            message.setText("안녕하세요? 쉐어택시입니다.\n\n $code \n\n 위 코드를 입력해 이메일 인증을 완료해주세요.")                        // 이메일 내용
+            message.setText("안녕하세요? 쉐어택시입니다.\n\n " +
+                    "$code \n\n 위 코드를 입력해 이메일 인증을 완료해주세요.") // 이메일 내용
 
             // 메일 전송
             Transport.send(message)
