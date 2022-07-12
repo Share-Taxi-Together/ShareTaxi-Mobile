@@ -56,10 +56,11 @@ ERD링크
 
 | Name    | 이지윤                                  | 윤채림                                      |
 | ------- | -------------------------------------- | ------------------------------------------- | 
-| Profile |                                | <img width="200px" src="https://avatars.githubusercontent.com/u/87295524?v=4" />                             |
-| role    | PM, DB, Frontend                | Frontend, Backend                                  |
+| Profile | <img width="200px" src="https://avatars.githubusercontent.com/u/52478817?v=4" />     | <img width="200px" src="https://avatars.githubusercontent.com/u/87295524?v=4" />                             |
+| role    | PM, Frontend, Backend                | Frontend, Backend                                  |
 | Github  | [@wldsbs](https://github.com/wldsbs) | [@crimii112](https://github.com/crimii112) |
 
+  
   
 ## 7. Git 규칙
 
