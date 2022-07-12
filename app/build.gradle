@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+//    id 'kotlin-kapt'
 }
 
 Properties properties = new Properties()
@@ -37,6 +38,13 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
+//    dataBinding{
+//        enabled = true
+//    }
 }
 
 dependencies {

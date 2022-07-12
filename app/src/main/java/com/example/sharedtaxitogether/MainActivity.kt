@@ -18,16 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initNavigationBar()
-
-//        val editEmail = findViewById<EditText>(R.id.editEmail)
-//        val btnSend = findViewById<Button>(R.id.btnSend)
-//
-//        btnSend.setOnClickListener {
-//            val email = editEmail.text.toString()
-//
-//            GMailSender().sendEmail(email)
-//            Toast.makeText(applicationContext, "이메일을 확인해주세요", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     private fun initNavigationBar() {

@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="35dp"
+            android:text="회원가입"
+            android:textColor="@color/colorGray8c8c"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutStep1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="visible"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+                android:hint="학교메일"
+                android:inputType="textEmailAddress"
+                android:paddingStart="8dp" />
+
+            <TextView
+                android:id="@+id/textEmailCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="이메일 확인"
+                android:textColor="@color/colorGray8c8c"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editEmailCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+                android:hint="이메일 인증코드"
+                android:inputType="numberDecimal"
+                android:paddingStart="8dp" />
+
+            <TextView
+                android:id="@+id/textEmailCodeCheck"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인"
+                android:textStyle="bold"
+                android:textColor="@color/colorGray8c8c"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutStep2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/editPhone"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_weight="3"
+                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+                android:hint="핸드폰번호"
+                android:inputType="phone"
+                android:paddingStart="8dp" />
+
+            <TextView
+                android:id="@+id/textPhoneCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="인증"
+                android:textColor="@color/colorGray8c8c"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editPhoneCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+                android:hint="번호 인증코드"
+                android:inputType="numberDecimal"
+                android:paddingStart="8dp" />
+
+            <TextView
+                android:id="@+id/textPhoneCodeCheck"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인"
+                android:textStyle="bold"
+                android:textColor="@color/colorGray8c8c"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layoutStep2"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="1"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="vertical">-->
+<!--&lt;!&ndash;        android:visibility="gone">&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <EditText&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/editEmailCode2"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="350dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="50dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:background="@drawable/bg_edit_stroke_grayc8c8_2"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:hint="이메일 인증코드"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:inputType="numberDecimal" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/textEmailCodeCheck2"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_marginBottom="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:text="확인"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textColor="@color/colorGray8c8c"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:textSize="25sp" />&ndash;&gt;-->
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:id="@+id/layoutStep3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/editNickname"
+            android:layout_width="match_parent"
+            android:paddingStart="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+            android:hint="닉네임"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:paddingStart="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+            android:hint="비밀번호"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editPasswordConfirm"
+            android:paddingStart="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+            android:hint="비밀번호확인"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/editGender"
+            android:paddingStart="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_edit_stroke_grayc8c8_2"
+            android:hint="성별 나중에 바꾸자~~ 드롭다운?체크박스?" />
+
+        <Button
+            android:id="@+id/btnSignup"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="50dp"
+            android:text="회원가입"
+            android:textStyle="bold"
+            android:textColor="@color/colorGray8c8c"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_mail"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:text="학교메일주소"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_mail"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="textEmailAddress"-->
+    <!--        android:maxLength="45"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toStartOf="@id/text_auth_mail"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_mail" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_auth_mail"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="28dp"-->
+    <!--        android:text="인증요청"-->
+    <!--        android:textSize="14sp"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@id/edit_mail"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toendOf="@id/text_auth_mail"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_mail" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_mail_num"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:paddingStart="20dp"-->
+    <!--        android:text="인증 번호 입력"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_mail"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_mail_num"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="numberDecimal"-->
+    <!--        android:maxLength="45"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_mail_num" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_nickname"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:text="닉네임"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_mail_num" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_nickname"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="text"-->
+    <!--        android:maxLength="45"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toStartOf="@id/text_dup_nickname"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_nickname" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_dup_nickname"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="28dp"-->
+    <!--        android:text="중복확인"-->
+    <!--        android:textSize="14sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/text_passwd"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/edit_nickname"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_nickname" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_passwd"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:paddingStart="20dp"-->
+    <!--        android:text="비밀번호"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_nickname"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_passwd"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:maxLength="15"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_passwd" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_passwd_confirm"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:paddingStart="20dp"-->
+    <!--        android:text="비밀번호"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_passwd" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_passwd_confirm"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:maxLength="15"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_passwd_confirm" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_phone"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:text="전화번호"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_passwd_confirm" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_phone"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="text"-->
+    <!--        android:maxLength="45"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toStartOf="@id/text_auth_phone"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_phone" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_auth_phone"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginEnd="28dp"-->
+    <!--        android:text="중복확인"-->
+    <!--        android:textSize="14sp"-->
+    <!--        app:layout_constraintBottom_toTopOf="@id/text_phone_num"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/edit_phone"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_phone" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_phone_num"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:paddingStart="20dp"-->
+    <!--        android:text="인증번호"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_phone"-->
+    <!--        tools:ignore="MissingConstraints" />-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/edit_phone_num"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="40dp"-->
+    <!--        android:layout_marginStart="20dp"-->
+    <!--        android:layout_marginTop="4dp"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:background="@drawable/bg_edit_stroke_grayc8c8_2"-->
+    <!--        android:inputType="textPassword"-->
+    <!--        android:maxLength="15"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/text_phone_num" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/text_gender"-->
+    <!--        android:layout_width="0dp"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:paddingStart="20dp"-->
+    <!--        android:text="성별"-->
+    <!--        android:textColor="@color/colorGray8c8c"-->
+    <!--        android:textSize="12sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/edit_phone_num" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_signin"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="회원가입"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/text_gender" />-->
+
+
+</LinearLayout>
