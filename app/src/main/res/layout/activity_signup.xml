@@ -196,7 +196,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/editNickname"
@@ -231,15 +231,33 @@
             android:hint="비밀번호확인"
             android:inputType="textPassword" />
 
-        <EditText
-            android:id="@+id/editGender"
-            android:paddingStart="8dp"
-            android:layout_marginHorizontal="8dp"
+        <TextView
+            android:layout_marginStart="8dp"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_edit_stroke_grayc8c8_2"
-            android:hint="성별 나중에 바꾸자~~ 드롭다운?체크박스?" />
+            android:layout_height="wrap_content"
+            android:text="성별"
+            android:textSize="20sp"/>
+        <RadioGroup
+            android:id="@+id/genderRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:text="남"
+                android:layout_marginHorizontal="20dp"
+                android:id="@+id/genderM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RadioButton
+                android:layout_marginHorizontal="20dp"
+                android:text="여"
+                android:id="@+id/genderW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </RadioGroup>
+
+
 
         <Button
             android:id="@+id/btnSignup"
