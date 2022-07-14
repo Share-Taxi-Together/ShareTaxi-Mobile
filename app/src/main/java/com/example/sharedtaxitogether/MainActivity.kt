@@ -1,12 +1,16 @@
 package com.example.sharedtaxitogether
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.sharedtaxitogether.auth.GMailSender
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+
 
     private val listFragment = ListFragment()
     private val addListFragment = AddListFragment()
@@ -18,6 +22,16 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initNavigationBar()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if(auth.currentUser == null){
+            startActivity(Intent(this, LoginActivity::class.java))
+        } else{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     private fun initNavigationBar() {
