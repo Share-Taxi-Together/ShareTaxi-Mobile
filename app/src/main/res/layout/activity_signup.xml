@@ -204,7 +204,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RadioGroup
             android:id="@+id/genderRadioGroup"
@@ -246,7 +246,6 @@
 
         <EditText
             android:enabled="false"
-
             android:id="@+id/editNickname"
             android:layout_width="match_parent"
             android:layout_height="50dp"
