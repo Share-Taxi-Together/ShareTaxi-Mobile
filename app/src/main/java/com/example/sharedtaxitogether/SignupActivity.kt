@@ -12,8 +12,12 @@ import com.example.sharedtaxitogether.databinding.ActivitySignupBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
+import com.example.sharedtaxitogether.model.User as dao
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -23,23 +27,26 @@ class SignupActivity : AppCompatActivity() {
     private var storedVerificationId = "" //얘는 머지??
 
     private lateinit var auth: FirebaseAuth //파이어베이스 인증
+    private lateinit var fireStore: FirebaseFirestore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySignupBinding.inflate(layoutInflater)
-        auth = Firebase.auth
-        val verificationId = ""
-
-
         setContentView(binding.root)
+
+        auth = Firebase.auth
+        fireStore = Firebase.firestore
+
+//        val verificationId = ""
 
         //이메일
         initEmail()
         initEmailValidCheck()
         emailCodeCheck()
 
-        //todo 핸드폰 인증(Firebase 사용)
+        //핸드폰 인증(Firebase 사용)
         //인증하기 버튼 클릭리스너
         binding.textPhoneCheck.setOnClickListener {
             val phoneNum = binding.editPhone.text.toString()
@@ -88,7 +95,23 @@ class SignupActivity : AppCompatActivity() {
         }
 
 
-        //todo 닉네임 중복확인 -> DB를 먼저 해야될듯
+        // 닉네임 중복확인 -> DB를 먼저 해야될듯
+        binding.editNickname.doOnTextChanged { text, _, _, _ ->
+            fireStore?.collection("users")
+                .whereEqualTo("nickname", binding.editNickname.text.toString())
+                .get()
+                .addOnSuccessListener {
+                    if (!it.isEmpty) {
+                        binding.editNickname.error = "같은 아이디가 존재합니다"
+                    }
+                }
+//                .addOnFailureListener { e ->
+//                    Toast.makeText(this, "사용 가능한 닉네임입니다", Toast.LENGTH_SHORT).show()
+//                    Log.w("hh", "Error adding document", e)
+//                }
+
+        }
+
 
         //비밀번호 6자리 이상
         var passwordCheck = false
@@ -107,7 +130,29 @@ class SignupActivity : AppCompatActivity() {
             else binding.editPasswordConfirm.error = "비밀번호가 다릅니다"
         }
 
-        //todo 데이터 베이스에 정보 추가
+
+        // 데이터 베이스에 정보 추가
+        binding.btnSignup.setOnClickListener {
+            val uid = auth.uid
+            val email = binding.editEmail.text.toString()
+            val password = binding.editPassword.text.toString()
+            val nickname = binding.editNickname.text.toString()
+            val gender = "W"
+
+
+            val user =
+                com.example.sharedtaxitogether.model.User(uid, email, nickname, password, gender)
+
+            fireStore?.collection("users").document(uid!!).set(user)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "회원가입을 실패했습니다", Toast.LENGTH_SHORT).show()
+                    Log.w("hh", "Error adding document", e)
+                }
+        }
 
     }
 
@@ -132,15 +177,12 @@ class SignupActivity : AppCompatActivity() {
                         //인증성공
                         binding.layoutStep2.visibility = View.GONE
                         binding.layoutStep3.visibility = View.VISIBLE
-//                        startActivity(Intent(this, LoginActivity::class.java))
                     }
                 }
         } else {
             //인증실패
             Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
         }
-
-
     }
 
     // 이메일 유효성 체크
