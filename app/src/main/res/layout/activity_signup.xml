@@ -71,8 +71,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="6"
-                android:textAlignment="center"
                 android:text="이메일확인"
+                android:textAlignment="center"
                 android:textColor="@color/colorGray8c8c"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -87,8 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="메일인증코드"
                 android:layout_marginBottom="5dp"
+                android:text="메일인증코드"
                 android:textSize="18sp" />
 
             <EditText
@@ -96,9 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_edit_stroke_grayc8c8_2"
                 android:inputType="numberDecimal"
                 android:paddingStart="8dp" />
 
@@ -153,8 +153,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
-                android:textAlignment="center"
                 android:text="인증"
+                android:textAlignment="center"
                 android:textColor="@color/colorGray8c8c"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -164,12 +164,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="번호인증코드"
                 android:textSize="18sp" />
+
             <EditText
                 android:id="@+id/editPhoneCode"
                 android:layout_width="match_parent"
@@ -232,6 +234,7 @@
             android:layout_marginBottom="20dp"
             android:inputType="textPassword"
             android:paddingStart="8dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

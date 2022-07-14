@@ -112,6 +112,13 @@ class SignupActivity : AppCompatActivity() {
 
         }
 
+        var gender: String = ""
+        binding.genderRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.genderM -> gender = "M"
+                R.id.genderW -> gender = "W"
+            }
+        }
 
         //비밀번호 6자리 이상
         var passwordCheck = false
@@ -137,7 +144,7 @@ class SignupActivity : AppCompatActivity() {
             val email = binding.editEmail.text.toString()
             val password = binding.editPassword.text.toString()
             val nickname = binding.editNickname.text.toString()
-            val gender = "W"
+//            val gender = "W"
 
 
             val user =
@@ -213,7 +220,7 @@ class SignupActivity : AppCompatActivity() {
 
     //이메일 형식 체크
     private fun isEmailValid(email: String): Boolean {
-        if (!email.contains("tukorea.ac.kr")) return false
+//        if (!email.contains("tukorea.ac.kr")) return false
         val pattern = android.util.Patterns.EMAIL_ADDRESS
         return pattern.matcher(email).matches()
     }
