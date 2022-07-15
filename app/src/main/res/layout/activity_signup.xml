@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/buttonBack"
+            android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
