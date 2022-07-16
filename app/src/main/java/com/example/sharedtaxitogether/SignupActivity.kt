@@ -10,12 +10,10 @@ import androidx.core.widget.doOnTextChanged
 import com.example.sharedtaxitogether.auth.GMailSender
 import com.example.sharedtaxitogether.databinding.ActivitySignupBinding
 import com.example.sharedtaxitogether.model.User
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
@@ -42,6 +40,7 @@ class SignupActivity : AppCompatActivity() {
 
     private fun bind() {
         binding.btnBack.setOnClickListener {
+            //TODO 뒤로가기 눌렀을 때 어떻게 해야할까,,
             Toast.makeText(this, "회원가입을 취소하였습니다", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))
         }
@@ -148,12 +147,6 @@ class SignupActivity : AppCompatActivity() {
     private fun duplicateNicknameCheck() {
         val nickname = binding.editNickname.text.toString()
 
-//        if (checkAlreadyExist("nickname", nickname)) {
-//            binding.editNickname.error = "같은 아이디가 존재합니다"
-//            binding.editPassword.isEnabled = false
-//        } else {
-//            binding.editPassword.isEnabled = true
-//        }
         db.collection("users")
             .whereEqualTo("nickname", nickname)
             .get()
