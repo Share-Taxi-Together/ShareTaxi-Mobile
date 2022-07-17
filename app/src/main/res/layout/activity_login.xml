@@ -30,6 +30,7 @@
         android:id="@+id/loginMailEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="example@tukorea.ac.kr"
         android:layout_marginEnd="20dp"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toTopOf="@id/loginPasswdEdit"
