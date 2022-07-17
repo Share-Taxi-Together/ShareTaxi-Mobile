@@ -23,6 +23,10 @@ class LoginActivity:AppCompatActivity() {
 
         db = Firebase.firestore
 
+        bind()
+    }
+
+    private fun bind() {
         binding.signUpText.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
         }
@@ -32,7 +36,21 @@ class LoginActivity:AppCompatActivity() {
         }
 
         binding.loginButton.setOnClickListener {
+            val email = binding.loginMailEdit.text.toString()
+            val password = binding.loginPasswdEdit.text.toString()
+            val usersRef = db.collection("users")
 
+            usersRef.whereEqualTo("email", email)
+                .whereEqualTo("password", password)
+                .get()
+                .addOnSuccessListener {
+                    if(!it.isEmpty){
+                        Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                    } else {
+                        Toast.makeText(this, "로그인 실패 : 아이디 또는 비밀번호가 틀렸습니다", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
     }
 }
