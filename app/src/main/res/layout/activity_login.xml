@@ -20,7 +20,7 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:text="이메일"
+        android:text="학교메일"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/loginPasswdEdit"
         app:layout_constraintEnd_toStartOf="@id/loginMailEdit"

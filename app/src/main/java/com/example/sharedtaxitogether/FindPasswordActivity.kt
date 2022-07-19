@@ -1,6 +1,9 @@
 package com.example.sharedtaxitogether
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sharedtaxitogether.databinding.ActivityFindpasswordBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,43 +30,37 @@ class FindPasswordActivity : AppCompatActivity() {
         }
     }
 
-//    private fun resetPassword() {
-//        val email = binding.editEmail.text.toString()
-//        val phone = binding.editPhone.text.toString()
-//        val password = binding.editPassword.text.toString()
-//        val usersRef = db.collection("users")
-//
-//        usersRef.whereEqualTo("email", email)
-//            .whereEqualTo("phone", phone)
-//            .get()
-//            .addOnSuccessListener {
-//                if (!it.isEmpty) {
-//                    Log.d("thisiiii", it.documents.toString())
-//
-//                } else {
-//                    Toast.makeText(this, "실패 : 메일주소 또는 전화번호가 틀렸습니다", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
-
     private fun resetPassword() {
         val email = binding.editEmail.text.toString()
-        val phone = binding.editPhone.text.toString()
+        val phone = "+82" + binding.editPhone.text.toString().slice(1..10)
         val usersRef = db.collection("users")
 
         usersRef.whereEqualTo("email", email)
             .whereEqualTo("phone", phone)
             .get()
             .addOnSuccessListener { result ->
-                if(!result.isEmpty){
-                for (document in result) {
-                    val passwd = document["password"] as String
-                    binding.passwdText.text = passwd
-                }}else{
+                if (!result.isEmpty) {
+                    for (document in result) {
+                        val builder = AlertDialog.Builder(this)
+                        builder.setTitle("비밀번호")
+                            .setMessage("${document["nickname"]}님의 비밀번호는 ${document["password"]}입니다.")
+                            .setPositiveButton("로그인 하러가기",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    startActivity(Intent(this, LoginActivity::class.java))
+                                })
+                            .setNegativeButton("확인",
+                            DialogInterface.OnClickListener { dialog, id ->
+                                binding.passwdText.text = document["password"] as String
+                            })
+
+                        builder.show()
+//                        val passwd = document["password"] as String
+//                        binding.passwdText.text = passwd
+                    }
+                } else {
                     binding.passwdText.text = "메일 또는 전화번호가 틀렸습니다"
                 }
             }
-
 //            .addOnSuccessListener { documents ->
 //                if (!documents.isEmpty) {
 //                    for(document in documents){
