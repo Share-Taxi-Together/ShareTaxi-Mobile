@@ -23,6 +23,7 @@ android {
 
         buildConfigField "String", "GMAIL_ADDRESS", properties["gmail.address"]
         buildConfigField "String", "GMAIL_PASSWD", properties["gmail.passwd"]
+        buildConfigField "String", "TMAP_API_KEY", properties["tmap_api_key"]
     }
 
     buildTypes {

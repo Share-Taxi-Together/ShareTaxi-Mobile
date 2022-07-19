@@ -8,7 +8,7 @@ import com.skt.Tmap.TMapView
 
 class TMapActivity : AppCompatActivity(){
 
-    private val api_key :String= "l7xx89c8f722700a431a9d2bfa5451a0ebf8"
+    private val api_key :String= BuildConfig.TMAP_API_KEY
     lateinit var tMapView: TMapView
     lateinit var linearLayoutTmap: LinearLayout
 
