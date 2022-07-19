@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.databinding.DataBindingUtil
 import com.example.sharedtaxitogether.auth.GMailSender
 import com.example.sharedtaxitogether.databinding.ActivitySignupBinding
 import com.example.sharedtaxitogether.model.User
+import com.example.sharedtaxitogether.viewModel.UserInfoViewModel
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +23,8 @@ import java.util.concurrent.TimeUnit
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+    private val viewModel : UserInfoViewModel by viewModels()
+
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
@@ -29,8 +34,9 @@ class SignupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_signup)
+
+        binding.viewModel = viewModel
 
         auth = Firebase.auth
         db = Firebase.firestore
@@ -57,6 +63,7 @@ class SignupActivity : AppCompatActivity() {
             messageCodeCheck()
         }
         binding.genderRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            getGender()
             if (checkedId != -1) binding.editNickname.isEnabled = true
         }
         binding.editNickname.doOnTextChanged { _, _, _, _ ->
@@ -75,6 +82,8 @@ class SignupActivity : AppCompatActivity() {
 
     private fun sendMail() {
         val email = binding.editEmail.text.toString()
+        viewModel.email.value = email
+
 //        if (isEmailValid(email) && !checkAlreadyExist("email", email)) {
         if (isEmailValid(email)) {
             val mailSender = GMailSender()
@@ -97,6 +106,8 @@ class SignupActivity : AppCompatActivity() {
     //TODO 핸드폰번호 유효성 검사 후 메시지 보내도록 수정
     private fun sendMessage() {
         val phoneNum = binding.editPhone.text.toString()
+        viewModel.phone.value = phoneNum
+
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 phoneAuthNum = credential.smsCode.toString()
@@ -127,6 +138,9 @@ class SignupActivity : AppCompatActivity() {
     private fun messageCodeCheck() {
         val phoneCredential =
             PhoneAuthProvider.getCredential(storedVerificationId, phoneAuthNum)
+
+        viewModel.uid.value = storedVerificationId
+//        Log.d("viewModel.uid.value","${viewModel.uid.value}")
         signInWithPhoneAuthCredential(phoneCredential)
     }
 
@@ -146,6 +160,7 @@ class SignupActivity : AppCompatActivity() {
 
     private fun duplicateNicknameCheck() {
         val nickname = binding.editNickname.text.toString()
+        viewModel.nickname.value = nickname
 
         db.collection("users")
             .whereEqualTo("nickname", nickname)
@@ -162,6 +177,8 @@ class SignupActivity : AppCompatActivity() {
 
     private fun checkPassword() {
         val password = binding.editPassword.text.toString()
+        viewModel.password.value = password
+
         if (!isPasswordValid(password)) {
             binding.editPassword.error = "숫자, 문자, 특수문자 중 2가지 포함(6~15자)"
             binding.editPasswordConfirm.isEnabled = false
@@ -178,38 +195,33 @@ class SignupActivity : AppCompatActivity() {
         } else binding.btnSignup.isEnabled = true
     }
 
-    private fun getGender(): String {
-        var genderText = ""
-
+    private fun getGender(){
         if (binding.genderM.isChecked) {
-            genderText = "Male"
+            viewModel.gender.value = "Male"
         } else if (binding.genderF.isChecked) {
-            genderText = "Female"
+            viewModel.gender.value = "Female"
         }
-        Log.d("this", "genderText : $genderText")
-        return genderText
+        Log.d("this", "genderText : ${viewModel.gender.value}")
     }
 
     private fun saveUserDB() {
         if (checkValidValue()) {
             val uid = auth.uid
-            val email = binding.editEmail.text.toString()
-            val phone = binding.editPhone.text.toString()
-            val gender = getGender()
-            val nickname = binding.editNickname.text.toString()
-            val password = binding.editPassword.text.toString()
+            viewModel.uid.value = uid
 
             val user =
                 User(
-                    uid,
-                    email,
-                    phone,
-                    gender,
-                    nickname,
-                    password
+                    viewModel.uid.value!!,
+                    viewModel.email.value!!,
+                    viewModel.phone.value!!,
+                    viewModel.gender.value!!,
+                    viewModel.nickname.value!!,
+                    viewModel.password.value!!
                 )
 
-            db.collection("users").document(uid!!).set(user)
+//            val user = viewModel.insertUserInfo()
+//
+            db.collection("users").document(user.uid!!).set(user)
                 .addOnSuccessListener {
                     Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
