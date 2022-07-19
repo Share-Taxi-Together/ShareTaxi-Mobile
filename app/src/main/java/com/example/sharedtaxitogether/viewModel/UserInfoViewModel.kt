@@ -16,7 +16,6 @@ class UserInfoViewModel : ViewModel() {
     var score = MutableLiveData<String>()         //점수(노쇼 방지)
     var countAddress = MutableLiveData<String>()  //계좌번호
 
-
     init {
         Log.i("SignupViewModel", "SignupViewModel Created!!")
     }
