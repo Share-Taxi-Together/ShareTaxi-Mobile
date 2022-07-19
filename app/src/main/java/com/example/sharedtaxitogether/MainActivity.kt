@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 class MainActivity : AppCompatActivity() {
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
-
     private val listFragment = ListFragment()
     private val addListFragment = AddListFragment()
     private val chatFragment = ChatFragment()

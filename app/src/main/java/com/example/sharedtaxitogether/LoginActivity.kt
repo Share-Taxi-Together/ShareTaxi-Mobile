@@ -31,9 +31,9 @@ class LoginActivity:AppCompatActivity() {
             startActivity(Intent(this, SignupActivity::class.java))
         }
 
-        binding.findPasswdText.setOnClickListener {
+        /*binding.findPasswdText.setOnClickListener {
             startActivity(Intent(this, FindPasswordActivity::class.java))
-        }
+        }*/
 
         binding.loginButton.setOnClickListener {
             val email = binding.loginMailEdit.text.toString()
