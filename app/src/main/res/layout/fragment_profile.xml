@@ -29,7 +29,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             tools:src="@drawable/male" />
 
         <TextView
@@ -79,16 +79,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="학교메일"
+            android:layout_marginBottom="5dp"
             android:textSize="20sp"
             android:textStyle="bold" />
-
 
         <TextView
             android:id="@+id/emailTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="example@tukorea.ac.kr" />
@@ -107,11 +107,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="*******" />
-
 
         <TextView
             android:layout_width="match_parent"
@@ -126,7 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="010-1234-5678" />
@@ -136,7 +135,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,12 +143,22 @@
 
 
         <TextView
+            android:id="@+id/modifyInfoTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="정보수정"
+            android:textAlignment="center"
+            android:layout_marginBottom="20dp"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+        <TextView
             android:id="@+id/logoutTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="로그아웃"
             android:textAlignment="center"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textStyle="bold"
             android:textSize="20sp" />
 

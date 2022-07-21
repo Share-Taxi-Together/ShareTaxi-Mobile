@@ -1,18 +1,13 @@
 package com.example.sharedtaxitogether
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import com.example.sharedtaxitogether.auth.GMailSender
+import com.example.sharedtaxitogether.viewModel.LoginViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
-    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
-
-
     private val listFragment = ListFragment()
     private val addListFragment = AddListFragment()
     private val chatFragment = ChatFragment()
@@ -61,6 +56,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeFragment(fragment: Fragment){
+        if(fragment == profileFragment){
+            //유저정보 넘겨주기
+        }
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, fragment)
