@@ -105,7 +105,7 @@ class SignupActivity : AppCompatActivity() {
 
     //TODO 핸드폰번호 유효성 검사 후 메시지 보내도록 수정
     private fun sendMessage() {
-        val phoneNum = binding.editPhone.text.toString()
+        val phoneNum = "+82" + binding.editPhone.text.toString().slice(1..10)
         viewModel.phone.value = phoneNum
 
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -140,7 +140,6 @@ class SignupActivity : AppCompatActivity() {
             PhoneAuthProvider.getCredential(storedVerificationId, phoneAuthNum)
 
         viewModel.uid.value = storedVerificationId
-//        Log.d("viewModel.uid.value","${viewModel.uid.value}")
         signInWithPhoneAuthCredential(phoneCredential)
     }
 
