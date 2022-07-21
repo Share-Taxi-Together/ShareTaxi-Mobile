@@ -84,7 +84,6 @@ class SignupActivity : AppCompatActivity() {
         val email = binding.editEmail.text.toString()
         viewModel.email.value = email
 
-//        if (isEmailValid(email) && !checkAlreadyExist("email", email)) {
         if (isEmailValid(email)) {
             val mailSender = GMailSender()
             code = mailSender.code  //이메일 인증코드 저장
@@ -215,11 +214,10 @@ class SignupActivity : AppCompatActivity() {
                     viewModel.phone.value!!,
                     viewModel.gender.value!!,
                     viewModel.nickname.value!!,
-                    viewModel.password.value!!
+                    viewModel.password.value!!,
+                    viewModel.score.value!!
                 )
 
-//            val user = viewModel.insertUserInfo()
-//
             db.collection("users").document(user.uid!!).set(user)
                 .addOnSuccessListener {
                     Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
@@ -253,7 +251,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun isEmailValid(email: String): Boolean {
-        if (!email.contains("@tukorea.ac.kr")) return false
+//        if (!email.contains("@tukorea.ac.kr")) return false
         val pattern = android.util.Patterns.EMAIL_ADDRESS
         return pattern.matcher(email).matches()
     }
