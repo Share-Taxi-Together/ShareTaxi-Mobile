@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="점수 : " />
+            android:text="@string/score" />
 
         <TextView
             android:id="@+id/scoreTextView"
@@ -90,7 +90,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="학교메일"
+            android:text="@string/email"
             android:layout_marginBottom="5dp"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="비밀번호"
+            android:text="@string/password"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -128,7 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="전화번호"
+            android:text="@string/phone"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -158,7 +158,7 @@
             android:id="@+id/modifyInfoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="정보수정"
+            android:text="@string/modify"
             android:textAlignment="center"
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
@@ -168,7 +168,7 @@
             android:id="@+id/logoutTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="로그아웃"
+            android:text="@string/logout"
             android:textAlignment="center"
             android:layout_marginBottom="20dp"
             android:textStyle="bold"
@@ -179,10 +179,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="회원탈퇴"
+            android:text="@string/withdraw"
             android:textStyle="bold"
             android:textSize="20sp" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
