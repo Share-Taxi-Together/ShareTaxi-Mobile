@@ -199,7 +199,7 @@ class SignupActivity : AppCompatActivity() {
         } else if (binding.genderF.isChecked) {
             viewModel.gender.value = "Female"
         }
-        Log.d("this", "genderText : ${viewModel.gender.value}")
+        Log.d(TAG, "genderText : ${viewModel.gender.value}")
     }
 
     private fun saveUserDB() {
@@ -225,7 +225,7 @@ class SignupActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "회원가입을 실패했습니다", Toast.LENGTH_SHORT).show()
-                    Log.w("hh", "Error adding document", e)
+                    Log.w(TAG, "Error adding document", e)
                 }
         } else {
             Toast.makeText(this, "입력정보 중 뭔가 틀렸습니다ㅋ", Toast.LENGTH_SHORT).show()
@@ -258,5 +258,9 @@ class SignupActivity : AppCompatActivity() {
 
     private fun isPasswordValid(password: String): Boolean {
         return password.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{6,15}\$".toRegex())
+    }
+
+    companion object {
+        private const val TAG = "SignupActivity"
     }
 }
