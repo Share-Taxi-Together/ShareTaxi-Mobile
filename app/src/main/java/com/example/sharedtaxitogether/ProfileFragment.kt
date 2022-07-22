@@ -3,6 +3,7 @@ package com.example.sharedtaxitogether
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,51 +26,6 @@ class ProfileFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
-    }
-
-    private fun bind() {
-        binding.modifyInfoTextView.setOnClickListener {
-
-        }
-        binding.logoutTextView.setOnClickListener {
-            logout()
-        }
-        binding.withdrawTextView.setOnClickListener {
-            withdraw()
-        }
-        binding.profileImgView.setOnClickListener {
-            // TODO 프로필 변경
-
-        }
-    }
-
-    private fun withdraw() {
-        val builder = AlertDialog.Builder(mainActivity)
-        builder.setTitle("회원탈퇴")
-            .setMessage("${room.userDao().getNickname()}님 정말 탈퇴하시겠습니까?")
-            .setPositiveButton("탈퇴하기",
-                DialogInterface.OnClickListener { _, _ ->
-                    val token = room.userDao().getUid()
-                    db.collection("users").document(token)
-                        .delete()
-                        .addOnSuccessListener {
-                            Log.d(TAG, "회원탈퇴 성공")
-                            startActivity(Intent(mainActivity, LoginActivity::class.java))
-                        }
-                })
-            .setNegativeButton("취소",
-                DialogInterface.OnClickListener { _, _ ->
-                    Log.d(TAG, "회원탈퇴 취소")
-                })
-        builder.show()
-    }
-
-    private fun logout() {
-        val user = room.userDao().getUser()
-        Log.d(TAG, user.toString())
-        room.userDao().delete(user)
-
-        startActivity(Intent(mainActivity, LoginActivity::class.java))
     }
 
     override fun onCreateView(
@@ -103,6 +59,70 @@ class ProfileFragment : Fragment() {
         }.start()
 
         return binding.root
+    }
+
+    private fun bind() {
+        binding.modifyInfoTextView.setOnClickListener {
+
+        }
+        binding.logoutTextView.setOnClickListener {
+            logout()
+        }
+        binding.withdrawTextView.setOnClickListener {
+            withdraw()
+        }
+        binding.profileButton.setOnClickListener {
+            // TODO 프로필 변경
+//            Log.d(TAG, "프로필 변경 버튼 클릭")
+//            when {
+//                ContextCompat.checkSelfPermission(
+//                    mainActivity,
+//                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+//                ) == PackageManager.PERMISSION_GRANTED
+//                ->
+//                    //권한 존재 이미지 가져오기
+//                    getImageFomAlbum()
+//            }
+//            shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) ->{
+//            showPermissionContextPopup()
+//        }
+
+        }
+    }
+//
+//    private fun getImageFomAlbum() {
+//        val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.type = "image/*"
+//        startActivityForResult(intent, 1)
+//    }
+
+    private fun withdraw() {
+        val builder = AlertDialog.Builder(mainActivity)
+        builder.setTitle("회원탈퇴")
+            .setMessage("${room.userDao().getNickname()}님 정말 탈퇴하시겠습니까?")
+            .setPositiveButton("탈퇴하기",
+                DialogInterface.OnClickListener { _, _ ->
+                    val token = room.userDao().getUid()
+                    db.collection("users").document(token)
+                        .delete()
+                        .addOnSuccessListener {
+                            Log.d(TAG, "회원탈퇴 성공")
+                            startActivity(Intent(mainActivity, LoginActivity::class.java))
+                        }
+                })
+            .setNegativeButton("취소",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "회원탈퇴 취소")
+                })
+        builder.show()
+    }
+
+    private fun logout() {
+        val user = room.userDao().getUser()
+        Log.d(TAG, user.toString())
+        room.userDao().delete(user)
+
+        startActivity(Intent(mainActivity, LoginActivity::class.java))
     }
 
     companion object {
