@@ -1,7 +1,9 @@
 package com.example.sharedtaxitogether
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-
 class ProfileFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private lateinit var binding: FragmentProfileBinding
@@ -21,36 +22,39 @@ class ProfileFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
         mainActivity = context as MainActivity
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        binding = FragmentProfileBinding.inflate(layoutInflater)
-        db = Firebase.firestore
-
-        bind()
-    }
-
     private fun bind() {
-        //binding때문에 에러나는듯,,
-//        binding.logoutTextView.setOnClickListener {
-//            // TODO 로그아웃
-//        }
-//        binding.withdrawTextView.setOnClickListener {
-//            // TODO 회원탈퇴
-//        }
-//        binding.profileImgView.setOnClickListener {
-//            // TODO 프로필 변경
-//        }
+        binding.logoutTextView.setOnClickListener {
+            val user = room.userDao().getUser()
+            Log.d("profileFragment", user.toString())
+            room.userDao().delete(user)
+
+            startActivity(Intent(mainActivity,LoginActivity::class.java))
+        }
+        binding.withdrawTextView.setOnClickListener {
+            val token = room.userDao().getUid()
+            db.collection("users").document(token)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d("profileFragment","회원탈퇴 성공")
+                    startActivity(Intent(mainActivity,LoginActivity::class.java))
+                }
+        }
+        binding.profileImgView.setOnClickListener {
+            // TODO 프로필 변경
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater)
+        db = Firebase.firestore
+
+        bind()
 
         room = Room.databaseBuilder(
             mainActivity,

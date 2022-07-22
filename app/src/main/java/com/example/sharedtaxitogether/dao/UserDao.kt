@@ -8,6 +8,11 @@ interface UserDao {
     @Query("select * from user")
     fun getAll(): List<User>
 
+    @Query("select * from user")
+    fun getUser(): User
+
+    @Query("select uid from user")
+    fun getUid(): String
     @Query("select email from user")
     fun getEmail(): String
     @Query("select phone from user")
