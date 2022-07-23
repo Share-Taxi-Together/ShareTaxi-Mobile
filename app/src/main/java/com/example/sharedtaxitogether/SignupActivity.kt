@@ -1,11 +1,13 @@
 package com.example.sharedtaxitogether
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
@@ -46,8 +48,7 @@ class SignupActivity : AppCompatActivity() {
 
     private fun bind() {
         binding.btnBack.setOnClickListener {
-            Toast.makeText(this, "회원가입을 취소하였습니다", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, LoginActivity::class.java))
+            cancelSignup()
         }
         binding.textEmailCheck.setOnClickListener {
             sendMail()
@@ -77,6 +78,21 @@ class SignupActivity : AppCompatActivity() {
         binding.btnSignup.setOnClickListener {
             saveUserDB()
         }
+    }
+
+    private fun cancelSignup() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("회원가입을 취소하시겠습니까?")
+            .setPositiveButton("네",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "회원가입취소 - 네")
+                    finish()
+                })
+            .setNegativeButton("아니요",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "회원가입취소 - 아니요")
+                })
+        builder.show()
     }
 
     private fun sendMail() {
@@ -232,6 +248,7 @@ class SignupActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "회원가입을 실패했습니다", Toast.LENGTH_SHORT).show()
@@ -240,10 +257,6 @@ class SignupActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "입력정보 중 뭔가 틀렸습니다ㅋ", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun checkAlreadyExist(fieldStr: String, email: String) {
-
     }
 
     // TODO db 삽입 전 각 value 별 유효성 검사
