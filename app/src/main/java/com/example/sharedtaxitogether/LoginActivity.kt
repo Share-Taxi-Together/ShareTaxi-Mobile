@@ -33,8 +33,7 @@ class LoginActivity : AppCompatActivity() {
         room = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "UserDB"
-        )
-            .fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration().build()
 
         bind()
     }
@@ -53,9 +52,6 @@ class LoginActivity : AppCompatActivity() {
             viewModel.password.value = binding.loginPasswdEdit.text.toString()
             val usersRef = db.collection("users")
 
-            Log.d("로그인 실패?!", "${viewModel.email.value}")
-            Log.d("로그인 실패?!", "${viewModel.password.value}")
-
             usersRef.whereEqualTo("email", viewModel.email.value)
                 .whereEqualTo("password", viewModel.password.value)
                 .get()
@@ -71,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
                             viewModel.countAddress.value = document["countAddress"] as String?
                         }
                         val user: User = viewModel.insertUserInfo()
-                        Log.d("viewModel잘 들어갔는가?!", user.toString())
+                        Log.d(TAG, user.toString())
 
                         Thread {
                             room.userDao().insertUser(user)
@@ -85,5 +81,9 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
         }
+    }
+
+    companion object {
+        private const val TAG = "LoginActivity"
     }
 }

@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="15dp"
-                android:text="회원가입"
+                android:text="@string/signup"
                 android:textColor="@color/colorGray8c8c"
                 android:textSize="30sp"
                 android:textStyle="bold"
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="학교메일"
+                android:text="@string/email"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -69,7 +69,7 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="8dp"
                     android:layout_weight="2"
-                    android:hint="example@tukorea.ac.kr"
+                    android:hint="@string/emailExample"
                     android:inputType="textEmailAddress"
                     android:paddingStart="8dp" />
 
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:enabled="false"
-                    android:text="확인"
+                    android:text="@string/OK"
                     android:textColor="@color/colorGray8c8c"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -135,8 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:hint="+821012345678"
-                android:text="핸드폰번호"
+                android:hint="@string/phoneExample"
+                android:text="@string/phone"
                 android:textSize="18sp" />
 
             <LinearLayout
@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:enabled="false"
-                    android:text="확인"
+                    android:text="@string/OK"
                     android:textColor="@color/colorGray8c8c"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -224,7 +224,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:text="성별"
+                    android:text="@string/gender"
                     android:textSize="18sp" />
 
                 <RadioButton
@@ -233,7 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:text="남" />
+                    android:text="@string/male" />
 
                 <RadioButton
                     android:id="@+id/genderF"
@@ -241,14 +241,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_weight="1"
-                    android:text="여" />
+                    android:text="@string/female" />
             </RadioGroup>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="닉네임"
+                android:text="@string/nickname"
                 android:textSize="18sp" />
 
             <EditText
@@ -266,7 +266,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="비밀번호"
+                android:text="@string/password"
                 android:textSize="18sp" />
 
             <EditText
@@ -283,7 +283,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="비밀번호확인"
+                android:text="@string/passwordConfirm"
                 android:textSize="18sp" />
 
             <EditText
@@ -296,14 +296,13 @@
                 android:inputType="textPassword"
                 android:paddingStart="8dp" />
 
-
             <Button
                 android:id="@+id/btnSignup"
                 android:layout_width="150dp"
                 android:layout_height="45dp"
                 android:layout_marginBottom="50dp"
                 android:enabled="false"
-                android:text="회원가입"
+                android:text="@string/signup"
                 android:textColor="@color/colorGray8c8c"
                 android:textSize="20sp"
                 android:textStyle="bold" />

@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private val viewModel : UserInfoViewModel by viewModels()
+    private val viewModel: UserInfoViewModel by viewModels()
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -46,7 +46,6 @@ class SignupActivity : AppCompatActivity() {
 
     private fun bind() {
         binding.btnBack.setOnClickListener {
-            //TODO 뒤로가기 눌렀을 때 어떻게 해야할까,,
             Toast.makeText(this, "회원가입을 취소하였습니다", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, LoginActivity::class.java))
         }
@@ -84,11 +83,22 @@ class SignupActivity : AppCompatActivity() {
         val email = binding.editEmail.text.toString()
         viewModel.email.value = email
 
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener {
+                if (!it.isEmpty) {
+                    binding.editEmail.error = "이미 같은 메일이 존재합니다"
+                    binding.textEmailCheck.isEnabled = false
+                }
+            }
+
         if (isEmailValid(email)) {
             val mailSender = GMailSender()
             code = mailSender.code  //이메일 인증코드 저장
             mailSender.sendEmail(email)
             Toast.makeText(this, "이메일을 확인하여 인증을 완료해주세요", Toast.LENGTH_SHORT).show()
+            binding.textEmailCheck.isEnabled = false
             binding.btnEmailCodeCheck.isEnabled = true
         } else {
             binding.editEmail.error = "이메일을 정확히 입력해주세요"
@@ -193,13 +203,13 @@ class SignupActivity : AppCompatActivity() {
         } else binding.btnSignup.isEnabled = true
     }
 
-    private fun getGender(){
+    private fun getGender() {
         if (binding.genderM.isChecked) {
             viewModel.gender.value = "Male"
         } else if (binding.genderF.isChecked) {
             viewModel.gender.value = "Female"
         }
-        Log.d("this", "genderText : ${viewModel.gender.value}")
+        Log.d(TAG, "genderText : ${viewModel.gender.value}")
     }
 
     private fun saveUserDB() {
@@ -225,23 +235,15 @@ class SignupActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "회원가입을 실패했습니다", Toast.LENGTH_SHORT).show()
-                    Log.w("hh", "Error adding document", e)
+                    Log.w(TAG, "Error adding document", e)
                 }
         } else {
             Toast.makeText(this, "입력정보 중 뭔가 틀렸습니다ㅋ", Toast.LENGTH_SHORT).show()
         }
     }
 
-    //TODO 라이브 데이터 적용 후에 다시 하자 callback 함수는 리턴을 못해,,
     private fun checkAlreadyExist(fieldStr: String, email: String) {
-//        return  db.collection("users")
-//            .whereEqualTo(fieldStr, email)
-//            .get()
-//            .addOnSuccessListener {
-//                 return it.isEmpty
-//                Log.d("this,", "${it.documents}")
-////                exist = !it.isEmpty
-//            }
+
     }
 
     // TODO db 삽입 전 각 value 별 유효성 검사
@@ -258,5 +260,9 @@ class SignupActivity : AppCompatActivity() {
 
     private fun isPasswordValid(password: String): Boolean {
         return password.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{6,15}\$".toRegex())
+    }
+
+    companion object {
+        private const val TAG = "SignupActivity"
     }
 }

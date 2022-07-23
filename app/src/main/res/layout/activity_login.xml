@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
-
         <variable
             name="viewModel"
             type="com.example.sharedtaxitogether.viewModel.LoginViewModel" />
     </data>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +27,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="학교메일"
+            android:text="@string/email"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/loginPasswdEdit"
             app:layout_constraintEnd_toStartOf="@id/loginMailEdit"
@@ -41,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:hint="example@tukorea.ac.kr"
+            android:hint="@string/emailExample"
             android:inputType="textEmailAddress"
             app:layout_constraintBottom_toTopOf="@id/loginPasswdEdit"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +50,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:text="비밀번호"
+            android:text="@string/password"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@id/loginPasswdEdit"
             app:layout_constraintEnd_toStartOf="@id/loginPasswdEdit"
@@ -74,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="@string/signUp"
+            android:text="@string/joinMembership"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/loginButton"
             app:layout_constraintEnd_toStartOf="@id/findPasswdText"
@@ -99,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="100dp"
             android:layout_marginBottom="50dp"
-            android:text="로그인"
+            android:text="@string/login"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
