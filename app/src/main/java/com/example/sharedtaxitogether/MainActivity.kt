@@ -3,11 +3,8 @@ package com.example.sharedtaxitogether
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import com.example.sharedtaxitogether.viewModel.LoginViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private val listFragment = ListFragment()
@@ -25,30 +22,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //뒤로가기 버튼 클릭
-        if(System.currentTimeMillis() - mBackWait >= 2000){
+        if (System.currentTimeMillis() - mBackWait >= 2000) {
             mBackWait = System.currentTimeMillis()
             Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
-        } else{
+        } else {
             finish()    //액티비티 종료
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//
-//        if(auth.currentUser != null){
-//            Log.d("123mainActivity", "${auth.currentUser.}")
-//            startActivity(Intent(this, MainActivity::class.java))
-//        } else{
-//            startActivity(Intent(this, LoginActivity::class.java))
-//        }
-//    }
-
     private fun initNavigationBar() {
-        val navigation=findViewById<BottomNavigationView>(R.id.navigation)
-        navigation.run{
+        val navigation = findViewById<BottomNavigationView>(R.id.navigation)
+        navigation.run {
             setOnNavigationItemSelectedListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.waiting_list -> {
                         changeFragment(listFragment)
                     }
@@ -68,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeFragment(fragment: Fragment){
-        if(fragment == profileFragment){
+    private fun changeFragment(fragment: Fragment) {
+        if (fragment == profileFragment) {
             //유저정보 넘겨주기
         }
         supportFragmentManager

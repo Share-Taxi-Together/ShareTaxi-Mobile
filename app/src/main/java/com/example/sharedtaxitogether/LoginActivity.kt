@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginViewModel
     private lateinit var room: AppDatabase
 
-    var mBackWait : Long = 0
+    var mBackWait: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,11 +54,9 @@ class LoginActivity : AppCompatActivity() {
         binding.signUpText.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
         }
-
         binding.findPasswdText.setOnClickListener {
             startActivity(Intent(this, FindPasswordActivity::class.java))
         }
-
         binding.loginButton.setOnClickListener {
             viewModel.email.value = binding.loginMailEdit.text.toString()
             viewModel.password.value = binding.loginPasswdEdit.text.toString()

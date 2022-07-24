@@ -5,166 +5,253 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/profileImgView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/default_profile"
-        app:layout_constraintEnd_toStartOf="@id/genderNickname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:id="@+id/profileButton"
-        app:layout_constraintTop_toBottomOf="@id/profileImgView"
-        app:layout_constraintStart_toStartOf="@id/profileImgView"
-        app:layout_constraintEnd_toEndOf="@id/profileImgView"
-        android:text="프로필 변경"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
-        android:id="@+id/genderNickname"
-        android:layout_width="220dp"
+        android:id="@+id/layoutProfileImg"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:padding="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profileImgView"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/layoutNicknameScore"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/genderImgView"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            tools:src="@drawable/male" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImgView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/default_profile" />
 
-        <TextView
-            android:id="@+id/nicknameTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lines="1"
-            android:textSize="28sp"
-            tools:text="택시타자" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="220dp"
-        android:padding="5dp"
+        android:id="@+id/layoutNicknameScore"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="@id/profileButton"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profileImgView"
-        app:layout_constraintTop_toBottomOf="@id/genderNickname">
+        app:layout_constraintStart_toEndOf="@id/layoutProfileImg"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/genderNickname"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="@string/score" />
+            android:layout_marginTop="50dp"
+            android:padding="5dp">
 
-        <TextView
-            android:id="@+id/scoreTextView"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/genderImgView"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                tools:src="@drawable/male" />
+
+            <TextView
+                android:id="@+id/nicknameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:textSize="28sp"
+                tools:text="택시타자" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/editNickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_edit_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            tools:text="50" />
+            android:layout_marginBottom="30dp"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/scoreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                tools:text="50" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/userInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileButton">
+        app:layout_constraintTop_toBottomOf="@id/layoutProfileImg">
 
-        <TextView
+
+        <LinearLayout
+            android:paddingHorizontal="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            android:layout_marginBottom="5dp"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/emailTextView"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_email_24" />
+
+            <TextView
+                android:id="@+id/emailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                tools:text="example@tukorea.ac.kr" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/editEmail"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/horizontal_line_gray"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="example@tukorea.ac.kr" />
+            android:layout_height="1dp"/>
 
-        <TextView
+        <LinearLayout
+            android:paddingHorizontal="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="@string/password"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_lock_24" />
 
-        <TextView
-            android:id="@+id/passwdTextView"
+            <TextView
+                android:id="@+id/passwdTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                tools:text="*******" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/editPassword"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/horizontal_line_gray"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="*******" />
+            android:layout_height="1dp"/>
 
-        <TextView
+        <LinearLayout
+            android:paddingHorizontal="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="@string/phone"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/phoneTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="010-1234-5678" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_phone_android_24" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="계좌번호"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/phoneTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                tools:text="010-1234-5678" />
 
-        <TextView
-            android:id="@+id/accountAddressTextView"
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/editPhone"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textSize="15sp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_marginHorizontal="8dp"
+            android:src="@drawable/horizontal_line_gray"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="카카오뱅크 3333-11-1111111" />
+            android:layout_height="1dp"/>
+        <LinearLayout
+            android:paddingHorizontal="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_attach_money_24" />
+
+            <TextView
+                android:id="@+id/accountAddressTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="18sp"
+                android:text="카카오뱅크 3333-11-1111111"
+                tools:text="카카오뱅크 3333-11-1111111" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/editAccountAddress"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:layout_marginTop="70dp"
         android:orientation="vertical"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -172,33 +259,23 @@
 
 
         <TextView
-            android:id="@+id/modifyInfoTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/modify"
-            android:textAlignment="center"
-            android:layout_marginBottom="20dp"
-            android:textStyle="bold"
-            android:textSize="20sp" />
-
-        <TextView
             android:id="@+id/logoutTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:text="@string/logout"
             android:textAlignment="center"
-            android:layout_marginBottom="20dp"
-            android:textStyle="bold"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/withdrawTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:text="@string/withdraw"
-            android:textStyle="bold"
-            android:textSize="20sp" />
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
