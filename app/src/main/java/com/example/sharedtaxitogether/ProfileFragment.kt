@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
+import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -71,14 +72,11 @@ class ProfileFragment : Fragment() {
 
             dialog.setOnClickListener(object: EditNicknameDialog.OnDialogClickListener{
                 override fun onClicked(nickname: String) {
-                    // db 수정 및 ui수정
                     binding.nicknameTextView.text = nickname
                     db.collection("users").document(room.userDao().getUid())
                         .update("nickname", nickname)
                         .addOnSuccessListener {
                             // TODO room 변경
-                            //room.userDao().updateUser()
-                            //Log.d(TAG, "nickname변경 : ${room.userDao()}")
                         }
                 }
             })
@@ -86,9 +84,22 @@ class ProfileFragment : Fragment() {
         binding.editEmail.setOnClickListener {
             // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
 
+
         }
         binding.editPassword.setOnClickListener {
+            val passwordDialog = EditPasswordDialog(mainActivity)
+            passwordDialog.myDialog()
 
+            passwordDialog.setOnClickListener(object: EditPasswordDialog.OnDialogClickListener{
+                override fun onClicked(password: String) {
+                    binding.passwdTextView.text = password
+                    db.collection("users").document(room.userDao().getUid())
+                        .update("password", password)
+                        .addOnSuccessListener {
+                            // TODO room 변경
+                        }
+                }
+            })
         }
         binding.editPhone.setOnClickListener {
 
