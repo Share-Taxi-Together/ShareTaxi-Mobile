@@ -1,7 +1,9 @@
 package com.example.sharedtaxitogether
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +16,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
+//TODO viewModel 적용 (https://ddolcat.tistory.com/603)
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var viewModel: LoginViewModel
     private lateinit var room: AppDatabase
+
+    //자동로그인
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
     var mBackWait: Long = 0
 
@@ -37,7 +44,16 @@ class LoginActivity : AppCompatActivity() {
             AppDatabase::class.java, "UserDB"
         ).fallbackToDestructiveMigration().build()
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        editor = sharedPreferences.edit()
+
+        checkSharedPreference()
         bind()
+    }
+
+    private fun checkSharedPreference(){
+        binding.loginMailEdit.setText(sharedPreferences.getString("email",""))
+        binding.loginPasswdEdit.setText(sharedPreferences.getString("password",""))
     }
 
     override fun onBackPressed() {
@@ -82,6 +98,11 @@ class LoginActivity : AppCompatActivity() {
                         Thread {
                             room.userDao().insertUser(user)
                         }.start()
+
+                        //자동로그인 email, password 저장
+                        editor.putString("email", viewModel.email.value!!)
+                        editor.putString("password", viewModel.password.value!!)
+                        editor.commit()
 
                         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, MainActivity::class.java))
