@@ -51,9 +51,12 @@ class LoginActivity : AppCompatActivity() {
         bind()
     }
 
-    private fun checkSharedPreference(){
-        binding.loginMailEdit.setText(sharedPreferences.getString("email",""))
-        binding.loginPasswdEdit.setText(sharedPreferences.getString("password",""))
+    private fun checkSharedPreference() {
+        if ((sharedPreferences.getString("email", "") != "")
+            && (sharedPreferences.getString("password", "") != "")
+        ) {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     override fun onBackPressed() {

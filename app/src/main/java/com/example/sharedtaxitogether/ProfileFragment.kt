@@ -3,7 +3,9 @@ package com.example.sharedtaxitogether
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,10 @@ class ProfileFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var room: AppDatabase
 
+    //자동로그인
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -37,6 +43,9 @@ class ProfileFragment : Fragment() {
         db = Firebase.firestore
 
         bind()
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+        editor = sharedPreferences.edit()
 
         room = Room.databaseBuilder(
             mainActivity,
@@ -165,6 +174,10 @@ class ProfileFragment : Fragment() {
         val user = room.userDao().getUser()
         Log.d(TAG, user.toString())
         room.userDao().delete(user)
+
+        editor.putString("email", "")
+        editor.putString("password", "")
+        editor.commit()
 
         startActivity(Intent(mainActivity, LoginActivity::class.java))
         activity?.finish()
