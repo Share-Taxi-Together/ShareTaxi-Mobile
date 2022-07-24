@@ -3,7 +3,6 @@ package com.example.sharedtaxitogether
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -63,7 +62,8 @@ class ProfileFragment : Fragment() {
 
     private fun bind() {
         binding.modifyInfoTextView.setOnClickListener {
-
+            startActivity(Intent(mainActivity, ModifyInfoActivity::class.java))
+            //finish()
         }
         binding.logoutTextView.setOnClickListener {
             logout()
@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
 
         }
     }
-//
+
 //    private fun getImageFomAlbum() {
 //        val intent = Intent(Intent.ACTION_GET_CONTENT)
 //        intent.type = "image/*"
@@ -108,6 +108,7 @@ class ProfileFragment : Fragment() {
                         .addOnSuccessListener {
                             Log.d(TAG, "회원탈퇴 성공")
                             startActivity(Intent(mainActivity, LoginActivity::class.java))
+                            activity?.finish()
                         }
                 })
             .setNegativeButton("취소",
@@ -123,6 +124,7 @@ class ProfileFragment : Fragment() {
         room.userDao().delete(user)
 
         startActivity(Intent(mainActivity, LoginActivity::class.java))
+        activity?.finish()
     }
 
     companion object {

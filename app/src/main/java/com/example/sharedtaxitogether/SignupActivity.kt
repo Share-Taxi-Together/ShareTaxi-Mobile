@@ -1,14 +1,25 @@
 package com.example.sharedtaxitogether
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.sharedtaxitogether.auth.GMailSender
 import com.example.sharedtaxitogether.databinding.ActivitySignupBinding
 import com.example.sharedtaxitogether.model.User
@@ -38,6 +49,40 @@ class SignupActivity : AppCompatActivity() {
 
         binding.viewModel = viewModel
 
+        viewModel.existEmail.observe(this) {
+            if (isEmailValid(viewModel.email.value!!)) {
+                if (it) {
+                    binding.editEmail.error = "이미 같은 메일이 존재합니다"
+                    binding.textEmailCheck.isEnabled = false
+                    binding.textEmailCheck.setTextColor(
+                        ContextCompat.getColor(this, R.color.colorGray8c8c)
+                    )
+
+                } else {
+                    binding.textEmailCheck.setTextColor(
+                        ContextCompat.getColor(this, R.color.colorGreen)
+                    )
+                    binding.textEmailCheck.isEnabled = true
+                }
+            }
+        }
+
+        viewModel.existPhone.observe(this) {
+            if (it) {
+                binding.editPhone.error = "이미 같은 번호가 존재합니다"
+                binding.textPhoneCheck.isEnabled = false
+                binding.textPhoneCheck.setTextColor(
+                    ContextCompat.getColor(this, R.color.colorGray8c8c)
+                )
+
+            } else {
+                binding.textPhoneCheck.setTextColor(
+                    ContextCompat.getColor(this, R.color.colorGreen)
+                )
+                binding.textPhoneCheck.isEnabled = true
+            }
+        }
+
         auth = Firebase.auth
         db = Firebase.firestore
 
@@ -46,15 +91,26 @@ class SignupActivity : AppCompatActivity() {
 
     private fun bind() {
         binding.btnBack.setOnClickListener {
-            Toast.makeText(this, "회원가입을 취소하였습니다", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, LoginActivity::class.java))
+            cancelSignup()
         }
+
+        binding.editEmail.doAfterTextChanged {
+            Log.d(TAG, "doAfterTextChanged")
+            existEmail()
+        }
+
         binding.textEmailCheck.setOnClickListener {
             sendMail()
         }
         binding.btnEmailCodeCheck.setOnClickListener {
             emailCodeCheck(code)
         }
+        binding.editPhone.doAfterTextChanged {
+            Log.d(TAG, binding.editPhone.text.toString())
+            existPhone()
+        }
+//        binding.editPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+
         binding.textPhoneCheck.setOnClickListener {
             sendMessage()
         }
@@ -79,19 +135,59 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendMail() {
+    private fun cancelSignup() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("회원가입을 취소하시겠습니까?")
+            .setPositiveButton("네",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "회원가입취소 - 네")
+                    finish()
+                })
+            .setNegativeButton("아니요",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "회원가입취소 - 아니요")
+                })
+        builder.show()
+    }
+
+    private fun existEmail() {
         val email = binding.editEmail.text.toString()
         viewModel.email.value = email
+
+        Log.d(TAG, "viewModel.email.value : ${viewModel.email.value}")
 
         db.collection("users")
             .whereEqualTo("email", email)
             .get()
             .addOnSuccessListener {
-                if (!it.isEmpty) {
-                    binding.editEmail.error = "이미 같은 메일이 존재합니다"
-                    binding.textEmailCheck.isEnabled = false
-                }
+                viewModel.existEmail.value = !it.isEmpty
+                Log.d(TAG, "viewModel.emailExist.value : ${viewModel.existEmail.value}")
             }
+    }
+
+    private fun existPhone() {
+        if(binding.editPhone.text.toString().length == 11) {
+//            val phone = phoneNumForm(binding.editPhone.text.toString())
+            val phone = "+82" + binding.editPhone.text.toString().slice(1..10)
+            viewModel.phone.value = phone
+
+            Log.d(TAG, "viewModel.phone.value : ${viewModel.phone.value}")
+
+            db.collection("users")
+                .whereEqualTo("phone", phone)
+                .get()
+                .addOnSuccessListener {
+                    viewModel.existPhone.value = !it.isEmpty
+                    Log.d(TAG, "viewModel.existPhone.value : ${viewModel.existPhone.value}")
+                }
+        }
+    }
+
+    private fun phoneNumForm(phone: String) =
+        "+82" + phone.replace("-", "").slice(1..10)
+
+    private fun sendMail() {
+        val email = viewModel.email.value!!
 
         if (isEmailValid(email)) {
             val mailSender = GMailSender()
@@ -112,10 +208,9 @@ class SignupActivity : AppCompatActivity() {
         } else Toast.makeText(applicationContext, "코드가 맞지 않습니다", Toast.LENGTH_SHORT).show()
     }
 
-    //TODO 핸드폰번호 유효성 검사 후 메시지 보내도록 수정
     private fun sendMessage() {
-        val phoneNum = "+82" + binding.editPhone.text.toString().slice(1..10)
-        viewModel.phone.value = phoneNum
+//        val phoneNum = "+82" + binding.editPhone.text.toString().slice(1..10)
+//        viewModel.phone.value = phoneNum
 
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -132,7 +227,7 @@ class SignupActivity : AppCompatActivity() {
         }
 
         val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phoneNum)   // +821012345678
+            .setPhoneNumber(viewModel.phone.value!!)   // +821012345678
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(this)
             .setCallbacks(callbacks)
@@ -232,6 +327,7 @@ class SignupActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "회원가입을 실패했습니다", Toast.LENGTH_SHORT).show()
@@ -242,10 +338,6 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkAlreadyExist(fieldStr: String, email: String) {
-
-    }
-
     // TODO db 삽입 전 각 value 별 유효성 검사
     private fun checkValidValue(): Boolean {
 
@@ -253,7 +345,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun isEmailValid(email: String): Boolean {
-//        if (!email.contains("@tukorea.ac.kr")) return false
+        if (!email.contains("@tukorea.ac.kr")) return false
         val pattern = android.util.Patterns.EMAIL_ADDRESS
         return pattern.matcher(email).matches()
     }

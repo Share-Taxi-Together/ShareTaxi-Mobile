@@ -3,6 +3,8 @@ package com.example.sharedtaxitogether
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
@@ -29,6 +31,24 @@ class FindPasswordActivity : AppCompatActivity() {
         binding.btnResetPasswd.setOnClickListener {
             resetPassword()
         }
+        binding.btnBack.setOnClickListener {
+            cancelFindPassword()
+        }
+    }
+
+    private fun cancelFindPassword() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("비밀번호 찾기를 취소하시겠습니까?")
+            .setPositiveButton("네",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "비번찾기취소 - 네")
+                    finish()
+                })
+            .setNegativeButton("아니요",
+                DialogInterface.OnClickListener { _, _ ->
+                    Log.d(TAG, "비번찾기 - 아니요")
+                })
+        builder.show()
     }
 
     private fun resetPassword() {
@@ -79,5 +99,8 @@ class FindPasswordActivity : AppCompatActivity() {
 //                    Toast.makeText(this, "실패 : 메일주소 또는 전화번호가 틀렸습니다", Toast.LENGTH_SHORT).show()
 //                }
 //            }
+    }
+    companion object {
+        private const val TAG = "FindPasswordActivity"
     }
 }

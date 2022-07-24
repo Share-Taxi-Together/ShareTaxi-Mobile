@@ -18,7 +18,8 @@
             android:exported="true">
         </activity>
         <activity android:name=".SignupActivity"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".LoginActivity">
         </activity>
         <activity
             android:name=".LoginActivity"
@@ -30,9 +31,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".FindPasswordActivity"
-            android:exported="true">
+            android:exported="true"
+            android:parentActivityName=".LoginActivity">
         </activity>
-
+        <activity
+            android:name=".ModifyInfoActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

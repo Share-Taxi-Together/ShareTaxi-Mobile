@@ -20,6 +20,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginViewModel
     private lateinit var room: AppDatabase
 
+    var mBackWait : Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -36,6 +38,16 @@ class LoginActivity : AppCompatActivity() {
         ).fallbackToDestructiveMigration().build()
 
         bind()
+    }
+
+    override fun onBackPressed() {
+        //뒤로가기 버튼 클릭
+        if (System.currentTimeMillis() - mBackWait >= 2000) {
+            mBackWait = System.currentTimeMillis()
+            Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        } else {
+            finish()    //액티비티 종료
+        }
     }
 
     private fun bind() {
@@ -75,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
 
                         Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, MainActivity::class.java))
+                        finish()
                     } else {
                         Toast.makeText(this, "로그인 실패 : 아이디 또는 비밀번호가 틀렸습니다", Toast.LENGTH_SHORT)
                             .show()

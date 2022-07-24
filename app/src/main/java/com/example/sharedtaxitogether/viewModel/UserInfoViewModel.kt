@@ -13,8 +13,13 @@ class UserInfoViewModel : ViewModel() {
     var password = MutableLiveData<String>()
     var score = MutableLiveData<String>()         //점수(노쇼 방지)
 
+    var existEmail = MutableLiveData<Boolean>()
+    var existPhone = MutableLiveData<Boolean>()
+
     init {
         Log.i("SignupViewModel", "SignupViewModel Created!!")
         score.value = "0"
     }
+
+
 }
