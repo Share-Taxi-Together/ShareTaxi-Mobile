@@ -34,6 +34,10 @@
             android:exported="true"
             android:parentActivityName=".LoginActivity">
         </activity>
+        <activity
+            android:name=".ModifyInfoActivity"
+            android:parentActivityName=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

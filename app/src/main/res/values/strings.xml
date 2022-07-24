@@ -4,8 +4,11 @@
     <string name="findPasswd">비밀번호를 잊으셨나요?</string>
     <string name="email">학교메일</string>
     <string name="emailExample">example@tukorea.ac.kr</string>
+    <string name="emailAddress"> tukorea.ac.kr</string>
+
     <string name="password">비밀번호</string>
     <string name="passwordConfirm">비밀번호확인</string>
+    <string name="findPasswdTitle">비밀번호찾기</string>
 
     <string name="phone">전화번호</string>
     <string name="phoneExample">01012345678</string>

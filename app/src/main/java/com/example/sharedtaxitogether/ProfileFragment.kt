@@ -62,7 +62,8 @@ class ProfileFragment : Fragment() {
 
     private fun bind() {
         binding.modifyInfoTextView.setOnClickListener {
-
+            startActivity(Intent(mainActivity, ModifyInfoActivity::class.java))
+            //finish()
         }
         binding.logoutTextView.setOnClickListener {
             logout()
@@ -88,7 +89,7 @@ class ProfileFragment : Fragment() {
 
         }
     }
-//
+
 //    private fun getImageFomAlbum() {
 //        val intent = Intent(Intent.ACTION_GET_CONTENT)
 //        intent.type = "image/*"

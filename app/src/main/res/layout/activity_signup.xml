@@ -68,17 +68,27 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_weight="2"
-                    android:hint="@string/emailExample"
+                    android:layout_weight="1"
                     android:inputType="textEmailAddress"
                     android:paddingStart="8dp" />
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text=" @tukorea.ac.kr"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textColor="@color/colorGray8c8c"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold" />-->
 
                 <TextView
                     android:id="@+id/textEmailCheck"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_weight="6"
+                    android:layout_weight="2"
                     android:text="이메일확인"
                     android:textAlignment="center"
                     android:textColor="@color/colorGray8c8c"
