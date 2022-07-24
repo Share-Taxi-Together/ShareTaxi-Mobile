@@ -12,6 +12,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
+import com.example.sharedtaxitogether.dialog.EditNicknameDialog
+import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -41,10 +43,14 @@ class ProfileFragment : Fragment() {
             AppDatabase::class.java, "UserDB"
         ).allowMainThreadQueries().build()
 
+        initView()
+
+        return binding.root
+    }
+
+    private fun initView() {
         Thread {
             activity?.runOnUiThread {
-//            val userInfo = room.userDao().getAll()
-//            Log.d("userInfo", userInfo.toString())
                 when (room.userDao().getGender()) {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
@@ -56,22 +62,59 @@ class ProfileFragment : Fragment() {
                 binding.phoneTextView.text = room.userDao().getPhone()
             }
         }.start()
-
-        return binding.root
     }
 
+
     private fun bind() {
-        binding.modifyInfoTextView.setOnClickListener {
-            startActivity(Intent(mainActivity, ModifyInfoActivity::class.java))
-            //finish()
+        binding.editNickname.setOnClickListener {
+            val dialog = EditNicknameDialog(mainActivity)
+            dialog.myDialog()
+
+            dialog.setOnClickListener(object: EditNicknameDialog.OnDialogClickListener{
+                override fun onClicked(nickname: String) {
+                    binding.nicknameTextView.text = nickname
+                    db.collection("users").document(room.userDao().getUid())
+                        .update("nickname", nickname)
+                        .addOnSuccessListener {
+                            // TODO room 변경
+                        }
+                }
+            })
         }
+        binding.editEmail.setOnClickListener {
+            // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
+
+
+        }
+        binding.editPassword.setOnClickListener {
+            val passwordDialog = EditPasswordDialog(mainActivity)
+            passwordDialog.myDialog()
+
+            passwordDialog.setOnClickListener(object: EditPasswordDialog.OnDialogClickListener{
+                override fun onClicked(password: String) {
+                    binding.passwdTextView.text = password
+                    db.collection("users").document(room.userDao().getUid())
+                        .update("password", password)
+                        .addOnSuccessListener {
+                            // TODO room 변경
+                        }
+                }
+            })
+        }
+        binding.editPhone.setOnClickListener {
+
+        }
+        binding.editAccountAddress.setOnClickListener {
+
+        }
+
         binding.logoutTextView.setOnClickListener {
             logout()
         }
         binding.withdrawTextView.setOnClickListener {
             withdraw()
         }
-        binding.profileButton.setOnClickListener {
+        binding.profileImgView.setOnClickListener {
             // TODO 프로필 변경
 //            Log.d(TAG, "프로필 변경 버튼 클릭")
 //            when {
