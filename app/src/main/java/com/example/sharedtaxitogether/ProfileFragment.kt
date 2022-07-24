@@ -73,15 +73,19 @@ class ProfileFragment : Fragment() {
                 override fun onClicked(nickname: String) {
                     // db 수정 및 ui수정
                     binding.nicknameTextView.text = nickname
-
-
-
+                    db.collection("users").document(room.userDao().getUid())
+                        .update("nickname", nickname)
+                        .addOnSuccessListener {
+                            // TODO room 변경
+                            //room.userDao().updateUser()
+                            //Log.d(TAG, "nickname변경 : ${room.userDao()}")
+                        }
                 }
             })
         }
         binding.editEmail.setOnClickListener {
-
             // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
+
         }
         binding.editPassword.setOnClickListener {
 
