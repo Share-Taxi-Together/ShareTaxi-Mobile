@@ -224,13 +224,12 @@
                 android:src="@drawable/ic_baseline_attach_money_24" />
 
             <TextView
-                android:id="@+id/accountAddressTextView"
+                android:id="@+id/countAddressTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:textSize="18sp"
-                android:text="카카오뱅크 3333-11-1111111"
-                tools:text="카카오뱅크 3333-11-1111111" />
+                tools:text="카카오뱅크 3333111111111" />
 
             <View
                 android:layout_width="0dp"

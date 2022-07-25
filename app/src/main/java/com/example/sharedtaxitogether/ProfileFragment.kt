@@ -74,6 +74,7 @@ class ProfileFragment : Fragment() {
                 }
                 binding.passwdTextView.text = pw
                 binding.phoneTextView.text = room.userDao().getPhone()
+                binding.countAddressTextView.text = room.userDao().getCountAddress()
             }
         }.start()
     }
@@ -90,10 +91,11 @@ class ProfileFragment : Fragment() {
                 }
             })
         }
-        binding.editEmail.setOnClickListener {
-            // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
-            showDialog("email",binding.emailTextView)
-        }
+        //TODO 이메일 수정
+//        binding.editEmail.setOnClickListener {
+//            // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
+//            showDialog("email",binding.emailTextView)
+//        }
         binding.editPassword.setOnClickListener {
             val passwordDialog = EditPasswordDialog(mainActivity, pref.getStringValue("password"))
             passwordDialog.myDialog()
@@ -109,16 +111,17 @@ class ProfileFragment : Fragment() {
                 }
             })
         }
-        binding.editPhone.setOnClickListener {
-
-        }
+        //TODO 전화번호 수정
+//        binding.editPhone.setOnClickListener {
+//
+//        }
         binding.editAccountAddress.setOnClickListener {
             val dialog = EditCountAddressDialog(mainActivity)
             dialog.myDialog()
 
             dialog.setOnClickListener(object: EditCountAddressDialog.OnDialogClickListener{
                 override fun onClicked(countAddress: String) {
-                    binding.accountAddressTextView.text = countAddress
+                    binding.countAddressTextView.text = countAddress
                     modifyInfo("countAddress", countAddress)
                 }
             })

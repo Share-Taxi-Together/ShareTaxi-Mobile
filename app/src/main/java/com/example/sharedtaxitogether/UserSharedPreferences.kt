@@ -49,6 +49,7 @@ class UserSharedPreferences(context: Context) {
             prefs.getString("password","").toString(),
             prefs.getString("score","").toString(),
             prefs.getString("imgUrl","").toString(),
+            prefs.getString("countAddress","").toString()
         )
     }
 }
