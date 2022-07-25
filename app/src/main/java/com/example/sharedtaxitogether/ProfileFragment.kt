@@ -6,19 +6,20 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
+import com.example.sharedtaxitogether.dialog.EditCountAddressDialog
+import com.example.sharedtaxitogether.dialog.EditDialog
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
 import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
@@ -91,7 +92,7 @@ class ProfileFragment : Fragment() {
         }
         binding.editEmail.setOnClickListener {
             // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
-
+            showDialog("email",binding.emailTextView)
         }
         binding.editPassword.setOnClickListener {
             val passwordDialog = EditPasswordDialog(mainActivity, pref.getStringValue("password"))
@@ -112,7 +113,15 @@ class ProfileFragment : Fragment() {
 
         }
         binding.editAccountAddress.setOnClickListener {
+            val dialog = EditCountAddressDialog(mainActivity)
+            dialog.myDialog()
 
+            dialog.setOnClickListener(object: EditCountAddressDialog.OnDialogClickListener{
+                override fun onClicked(countAddress: String) {
+                    binding.accountAddressTextView.text = countAddress
+                    modifyInfo("countAddress", countAddress)
+                }
+            })
         }
 
         binding.logoutTextView.setOnClickListener {
@@ -139,6 +148,18 @@ class ProfileFragment : Fragment() {
 //                pickImageFromGallery()
 //            }
         }
+    }
+
+    private fun showDialog(target: String, textView: TextView) {
+        val dialog = EditDialog(mainActivity, target)
+        dialog.myDialog()
+
+        dialog.setOnClickListener(object : EditDialog.OnDialogClickListener {
+            override fun onClicked(value: String) {
+                textView.text = value
+                modifyInfo(target, value)
+            }
+        })
     }
 
     // Open Gallery

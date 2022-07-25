@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bank">
+        <item>선택해주세요</item>
+        <item>카카오뱅크</item>
+        <item>국민은행</item>
+        <item>기업은행</item>
+        <item>농협은행</item>
+        <item>신한은행</item>
+        <item>우리은행</item>
+        <item>하나은행</item>
+        <item>부산은행</item>
+        <item>새마을금고</item>
+        <item>토스뱅크</item>
+        <item>케이뱅크</item>
+    </string-array>
+</resources>
