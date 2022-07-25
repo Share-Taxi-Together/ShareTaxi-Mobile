@@ -1,6 +1,5 @@
 package com.example.sharedtaxitogether
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
@@ -19,7 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
 import com.example.sharedtaxitogether.dialog.EditCountAddressDialog
-import com.example.sharedtaxitogether.dialog.EditDialog
+//import com.example.sharedtaxitogether.dialog.EditDialog
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
 import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
@@ -81,6 +80,7 @@ class ProfileFragment : Fragment() {
 
     private fun bind() {
         binding.editNickname.setOnClickListener {
+//            showDialog("nickname", binding.nicknameTextView)
             val dialog = EditNicknameDialog(mainActivity)
             dialog.myDialog()
 
@@ -113,7 +113,6 @@ class ProfileFragment : Fragment() {
         }
         //TODO 전화번호 수정
 //        binding.editPhone.setOnClickListener {
-//
 //        }
         binding.editAccountAddress.setOnClickListener {
             val dialog = EditCountAddressDialog(mainActivity)
@@ -153,17 +152,17 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun showDialog(target: String, textView: TextView) {
-        val dialog = EditDialog(mainActivity, target)
-        dialog.myDialog()
-
-        dialog.setOnClickListener(object : EditDialog.OnDialogClickListener {
-            override fun onClicked(value: String) {
-                textView.text = value
-                modifyInfo(target, value)
-            }
-        })
-    }
+//    private fun showDialog(target: String, textView: TextView) {
+//        val dialog = EditDialog(mainActivity, target)
+//        dialog.myDialog()
+//
+//        dialog.setOnClickListener(object : EditDialog.OnDialogClickListener {
+//            override fun onClicked(value: String) {
+//                textView.text = value
+//                modifyInfo(target, value)
+//            }
+//        })
+//    }
 
     // Open Gallery
     private fun pickImageFromGallery() {
@@ -171,23 +170,6 @@ class ProfileFragment : Fragment() {
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
-
-//    // 권한 받아오기
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        when (requestCode) {
-//            PERMISSION_CODE -> {
-//                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    pickImageFromGallery()
-//                } else {
-//                    Toast.makeText(mainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        }
-//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
@@ -239,8 +221,6 @@ class ProfileFragment : Fragment() {
         room.userDao().delete(user)
 
         pref.editor.clear().commit()
-//        editor.putBoolean("loginSession", false)
-//        editor.commit()
 
         startActivity(Intent(mainActivity, LoginActivity::class.java))
         activity?.finish()
@@ -249,7 +229,5 @@ class ProfileFragment : Fragment() {
     companion object {
         private const val TAG = "profileFragment"
         private val IMAGE_PICK_CODE = 1000
-        private val PERMISSION_CODE = 1001
-
     }
 }

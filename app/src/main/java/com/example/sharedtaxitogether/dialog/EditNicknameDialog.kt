@@ -2,12 +2,9 @@ package com.example.sharedtaxitogether.dialog
 
 import android.app.Dialog
 import android.content.Context
-import android.util.Log
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.widget.doAfterTextChanged
-import com.example.sharedtaxitogether.CheckValid
 import com.example.sharedtaxitogether.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -15,7 +12,6 @@ import com.google.firebase.ktx.Firebase
 
 class EditNicknameDialog(context: Context) {
     private val dialog = Dialog(context)
-//    private val valid: CheckValid by lazy { CheckValid() }
     private val db: FirebaseFirestore = Firebase.firestore
 
     fun myDialog() {
