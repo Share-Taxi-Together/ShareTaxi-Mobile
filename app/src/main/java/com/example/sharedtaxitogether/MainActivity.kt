@@ -1,9 +1,13 @@
 package com.example.sharedtaxitogether
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.room.Room
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -11,13 +15,45 @@ class MainActivity : AppCompatActivity() {
     private val addListFragment = AddListFragment()
     private val chatFragment = ChatFragment()
     private val profileFragment = ProfileFragment()
+
+    private val pref: UserSharedPreferences by lazy { UserSharedPreferences(this) }
+    private lateinit var room: AppDatabase
+
     private var mBackWait: Long = 0     //뒤로가기 연속 클릭 대기시간
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        room = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "UserDB"
+        ).fallbackToDestructiveMigration().build()
+
+        //앨범 접근 권한 - 허용하지 않으면 유저정보 띄울 수 없음(프로필사진)
+        //TODO 권한 거부했을 경우
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+            1001
+        )
+
         initNavigationBar()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        initUserInfo()
+    }
+
+    private fun initUserInfo() {
+        val user = pref.getUser()
+
+        Log.d("main - user", user.toString())
+        Thread {
+            room.userDao().insertUser(user)
+        }.start()
     }
 
     override fun onBackPressed() {
@@ -35,18 +71,10 @@ class MainActivity : AppCompatActivity() {
         navigation.run {
             setOnNavigationItemSelectedListener {
                 when (it.itemId) {
-                    R.id.waiting_list -> {
-                        changeFragment(listFragment)
-                    }
-                    R.id.add_list -> {
-                        changeFragment(addListFragment)
-                    }
-                    R.id.chatting -> {
-                        changeFragment(chatFragment)
-                    }
-                    R.id.profile -> {
-                        changeFragment(profileFragment)
-                    }
+                    R.id.waiting_list -> changeFragment(listFragment)
+                    R.id.add_list -> changeFragment(addListFragment)
+                    R.id.chatting -> changeFragment(chatFragment)
+                    R.id.profile -> changeFragment(profileFragment)
                 }
                 true
             }
@@ -55,9 +83,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeFragment(fragment: Fragment) {
-        if (fragment == profileFragment) {
-            //유저정보 넘겨주기
-        }
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, fragment)

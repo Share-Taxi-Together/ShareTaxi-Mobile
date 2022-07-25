@@ -1,16 +1,21 @@
 package com.example.sharedtaxitogether
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
@@ -25,10 +30,7 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private lateinit var db: FirebaseFirestore
     private lateinit var room: AppDatabase
-
-    //자동로그인
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
+    private val pref: UserSharedPreferences by lazy { UserSharedPreferences(mainActivity) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,9 +45,6 @@ class ProfileFragment : Fragment() {
         db = Firebase.firestore
 
         bind()
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mainActivity)
-        editor = sharedPreferences.edit()
 
         room = Room.databaseBuilder(
             mainActivity,
@@ -64,15 +63,19 @@ class ProfileFragment : Fragment() {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
                 }
+                binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
                 binding.nicknameTextView.text = room.userDao().getNickname()
                 binding.scoreTextView.text = room.userDao().getScore()
                 binding.emailTextView.text = room.userDao().getEmail()
-                binding.passwdTextView.text = room.userDao().getPassword()
+                var pw = ""
+                for (i in 1..room.userDao().getPassword().length) {
+                    pw += "*"
+                }
+                binding.passwdTextView.text = pw
                 binding.phoneTextView.text = room.userDao().getPhone()
             }
         }.start()
     }
-
 
     private fun bind() {
         binding.editNickname.setOnClickListener {
@@ -82,31 +85,26 @@ class ProfileFragment : Fragment() {
             dialog.setOnClickListener(object: EditNicknameDialog.OnDialogClickListener{
                 override fun onClicked(nickname: String) {
                     binding.nicknameTextView.text = nickname
-                    db.collection("users").document(room.userDao().getUid())
-                        .update("nickname", nickname)
-                        .addOnSuccessListener {
-                            // TODO room 변경
-                        }
+                    modifyInfo("nickname", nickname)
                 }
             })
         }
         binding.editEmail.setOnClickListener {
             // 중복확인, 유효성검사, db수정, ui 수정, 메일인증
 
-
         }
         binding.editPassword.setOnClickListener {
-            val passwordDialog = EditPasswordDialog(mainActivity)
+            val passwordDialog = EditPasswordDialog(mainActivity, pref.getStringValue("password"))
             passwordDialog.myDialog()
 
-            passwordDialog.setOnClickListener(object: EditPasswordDialog.OnDialogClickListener{
+            passwordDialog.setOnClickListener(object : EditPasswordDialog.OnDialogClickListener {
                 override fun onClicked(password: String) {
-                    binding.passwdTextView.text = password
-                    db.collection("users").document(room.userDao().getUid())
-                        .update("password", password)
-                        .addOnSuccessListener {
-                            // TODO room 변경
-                        }
+                    var pw = ""
+                    for (i in 1..password.length) {
+                        pw += "*"
+                    }
+                    binding.passwdTextView.text = pw
+                    modifyInfo("password", password)
                 }
             })
         }
@@ -124,29 +122,70 @@ class ProfileFragment : Fragment() {
             withdraw()
         }
         binding.profileImgView.setOnClickListener {
-            // TODO 프로필 변경
-//            Log.d(TAG, "프로필 변경 버튼 클릭")
-//            when {
-//                ContextCompat.checkSelfPermission(
-//                    mainActivity,
-//                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-//                ) == PackageManager.PERMISSION_GRANTED
-//                ->
-//                    //권한 존재 이미지 가져오기
-//                    getImageFomAlbum()
+            pickImageFromGallery()
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                if (ContextCompat.checkSelfPermission(
+//                        mainActivity, android.Manifest.permission.READ_EXTERNAL_STORAGE
+//                    )
+//                    == PackageManager.PERMISSION_DENIED
+//                ) {
+//                    //권한 없으면 권한 받기
+//                    val permissions = arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+//                    mainActivity.requestPermissions(permissions, PERMISSION_CODE)
+//                } else {
+//                    pickImageFromGallery()
+//                }
+//            } else {
+//                pickImageFromGallery()
 //            }
-//            shouldShowRequestPermissionRationale(android.Manifest.permission.READ_EXTERNAL_STORAGE) ->{
-//            showPermissionContextPopup()
-//        }
-
         }
     }
 
-//    private fun getImageFomAlbum() {
-//        val intent = Intent(Intent.ACTION_GET_CONTENT)
-//        intent.type = "image/*"
-//        startActivityForResult(intent, 1)
+    // Open Gallery
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+//    // 권한 받아오기
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        when (requestCode) {
+//            PERMISSION_CODE -> {
+//                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    pickImageFromGallery()
+//                } else {
+//                    Toast.makeText(mainActivity, "Permission denied", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
 //    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            binding.profileImgView.setImageURI(data?.data)
+            Log.d("profileData", data?.data.toString())
+
+            if (ContextCompat.checkSelfPermission(
+                    mainActivity,
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                ) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                modifyInfo("imgUrl", data?.data.toString())
+            }
+        }
+    }
+
+    private fun modifyInfo(field: String, value: String) {
+        db.collection("users").document(room.userDao().getUid())
+            .update(field, value)
+        pref.putValue(field, value)
+    }
 
     private fun withdraw() {
         val builder = AlertDialog.Builder(mainActivity)
@@ -168,16 +207,16 @@ class ProfileFragment : Fragment() {
                     Log.d(TAG, "회원탈퇴 취소")
                 })
         builder.show()
+        pref.editor.clear().commit()
     }
 
     private fun logout() {
         val user = room.userDao().getUser()
-        Log.d(TAG, user.toString())
         room.userDao().delete(user)
 
-        editor.putString("email", "")
-        editor.putString("password", "")
-        editor.commit()
+        pref.editor.clear().commit()
+//        editor.putBoolean("loginSession", false)
+//        editor.commit()
 
         startActivity(Intent(mainActivity, LoginActivity::class.java))
         activity?.finish()
@@ -185,5 +224,8 @@ class ProfileFragment : Fragment() {
 
     companion object {
         private const val TAG = "profileFragment"
+        private val IMAGE_PICK_CODE = 1000
+        private val PERMISSION_CODE = 1001
+
     }
 }
