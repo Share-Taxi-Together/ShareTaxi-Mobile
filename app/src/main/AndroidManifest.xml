@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -34,10 +34,6 @@
             android:exported="true"
             android:parentActivityName=".LoginActivity">
         </activity>
-        <activity
-            android:name=".ModifyInfoActivity"
-            android:parentActivityName=".MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

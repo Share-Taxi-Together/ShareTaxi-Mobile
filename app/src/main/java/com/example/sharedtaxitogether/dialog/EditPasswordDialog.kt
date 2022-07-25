@@ -9,8 +9,9 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.example.sharedtaxitogether.R
 
-class EditPasswordDialog(context: Context) {
+class EditPasswordDialog(context: Context, preValue: String) {
     private val dialog = Dialog(context)
+    private val preValue = preValue
 
     fun myDialog() {
         dialog.setContentView(R.layout.dialog_edit_password)
@@ -30,7 +31,12 @@ class EditPasswordDialog(context: Context) {
         val btnCancel = dialog.findViewById<TextView>(R.id.cancel_button)
 
         password.doAfterTextChanged {
-            // TODO DB 조회 - 이전 비밀번호 맞는지 확인
+            if(preValue == password.text.toString()){
+                newPassword.isEnabled = true
+            } else {
+                password.error = "이전 비밀번호가 틀렸습니다"
+                newPassword.isEnabled = false
+            }
         }
 
         newPassword.doOnTextChanged { _, _, _, _ ->
