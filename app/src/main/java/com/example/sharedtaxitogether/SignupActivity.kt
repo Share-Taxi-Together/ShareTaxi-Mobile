@@ -1,13 +1,8 @@
 package com.example.sharedtaxitogether
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.telephony.PhoneNumberFormattingTextWatcher
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -18,8 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.sharedtaxitogether.auth.GMailSender
 import com.example.sharedtaxitogether.databinding.ActivitySignupBinding
 import com.example.sharedtaxitogether.model.User
@@ -344,6 +337,7 @@ class SignupActivity : AppCompatActivity() {
         return true
     }
 
+    // TODO 유효성 검사 static으로 빼기
     private fun isEmailValid(email: String): Boolean {
         if (!email.contains("@tukorea.ac.kr")) return false
         val pattern = android.util.Patterns.EMAIL_ADDRESS
