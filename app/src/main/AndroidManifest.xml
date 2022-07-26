@@ -17,9 +17,13 @@
         <activity android:name=".MainActivity"
             android:exported="true">
         </activity>
+
         <activity android:name=".SignupActivity"
-            android:exported="true"
+                    android:exported="true"
             android:parentActivityName=".LoginActivity">
+        </activity>
+        <activity android:name=".TMapActivity"
+            android:exported="true">
         </activity>
         <activity
             android:name=".LoginActivity"

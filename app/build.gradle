@@ -23,6 +23,7 @@ android {
 
         buildConfigField "String", "GMAIL_ADDRESS", properties["gmail.address"]
         buildConfigField "String", "GMAIL_PASSWD", properties["gmail.passwd"]
+        buildConfigField "String", "TMAP_API_KEY", properties["tmap_api_key"]
     }
 
     buildTypes {
@@ -81,6 +82,7 @@ dependencies {
 
     implementation 'androidx.activity:activity-ktx:1.5.0'
     implementation 'androidx.fragment:fragment-ktx:1.5.0'
+    implementation files('libs\\com.skt.Tmap_1.73.jar')
 
     implementation 'androidx.preference:preference-ktx:1.1.1'
 
