@@ -51,6 +51,16 @@ class AddListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        binding.addPlace.setOnClickListener {
+            //custom dialog 만들어서 장소 추가하기
+            // 지도띄우기, 핀 움직여서 원하는 장소의 주소 받아오기
+            // 이름작성, 주소는 위에서 받아오고
+            // 추가하기 버튼 누르면 db에 추가
+
+            //count는 넣을지말지 고민중,,,
+            // 넣는다면 선택될때마다 세서 장소목록 보여줄 때 count 많은 순으로 정렬하기
+        }
+
         binding.spinnerNum.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
