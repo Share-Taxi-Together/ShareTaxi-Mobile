@@ -25,4 +25,13 @@
         <item>동성만</item>
         <item>상관없음</item>
     </string-array>
+
+    <string-array name="place">
+        <item>TIP</item>
+        <item>배곧생명공원</item>
+        <item>안산역</item>
+        <item>오이도역</item>
+        <item>이마트</item>
+        <item>정왕역</item>
+    </string-array>
 </resources>
