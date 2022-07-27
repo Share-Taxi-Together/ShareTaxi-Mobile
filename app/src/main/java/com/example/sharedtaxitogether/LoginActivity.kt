@@ -92,7 +92,6 @@ class LoginActivity : AppCompatActivity() {
                         viewModel.countAddress.value = document["countAddress"] as String?
                     }
 
-                    Log.d("imgUrl", viewModel.imgUrl.value!!)
                     val user: User = viewModel.insertUserInfo()
                     pref.saveUser(user)
 

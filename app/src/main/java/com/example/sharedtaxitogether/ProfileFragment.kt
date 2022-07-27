@@ -63,7 +63,10 @@ class ProfileFragment : Fragment() {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
                 }
-                binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
+                if(room.userDao().getImgUrl().isNullOrBlank())
+                    binding.profileImgView.setImageResource(R.drawable.default_profile)
+                else binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
+
                 binding.nicknameTextView.text = room.userDao().getNickname()
                 binding.scoreTextView.text = room.userDao().getScore()
                 binding.emailTextView.text = room.userDao().getEmail()
@@ -197,21 +200,19 @@ class ProfileFragment : Fragment() {
         val builder = AlertDialog.Builder(mainActivity)
         builder.setTitle("회원탈퇴")
             .setMessage("${room.userDao().getNickname()}님 정말 탈퇴하시겠습니까?")
-            .setPositiveButton("탈퇴하기",
-                DialogInterface.OnClickListener { _, _ ->
-                    val token = room.userDao().getUid()
-                    db.collection("users").document(token)
-                        .delete()
-                        .addOnSuccessListener {
-                            Log.d(TAG, "회원탈퇴 성공")
-                            startActivity(Intent(mainActivity, LoginActivity::class.java))
-                            activity?.finish()
-                        }
-                })
-            .setNegativeButton("취소",
-                DialogInterface.OnClickListener { _, _ ->
-                    Log.d(TAG, "회원탈퇴 취소")
-                })
+            .setPositiveButton("탈퇴하기") { _, _ ->
+                val token = room.userDao().getUid()
+                db.collection("users").document(token)
+                    .delete()
+                    .addOnSuccessListener {
+                        Log.d(TAG, "회원탈퇴 성공")
+                        startActivity(Intent(mainActivity, LoginActivity::class.java))
+                        activity?.finish()
+                    }
+            }
+            .setNegativeButton("취소") { _, _ ->
+                Log.d(TAG, "회원탈퇴 취소")
+            }
         builder.show()
         pref.editor.clear().commit()
     }
