@@ -29,11 +29,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutTmap">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +46,8 @@
             <Spinner
                 android:id="@+id/spinnerStart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog" />
         </LinearLayout>
 
         <TextView
@@ -59,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="90dp"
-            android:padding="5dp"
+            android:paddingHorizontal="5dp"
             android:singleLine="true"
             android:textSize="15sp"
             tools:text="시흥시 정왕동,,," />
@@ -85,7 +81,8 @@
             <Spinner
                 android:id="@+id/spinnerDest"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog" />
         </LinearLayout>
 
         <TextView
@@ -93,10 +90,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="90dp"
-            android:padding="5dp"
+            android:paddingHorizontal="5dp"
             android:singleLine="true"
             android:textSize="15sp"
             tools:text="시흥시 정왕동,,," />
+
+        <TextView
+            android:id="@+id/addPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            android:text="혹시 원하는 장소가 없나요?"
+            android:textColor="@color/purple_500"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
@@ -121,10 +128,11 @@
                     android:layout_height="wrap_content"
                     android:text="인원"
                     android:textSize="20sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <Spinner
                     android:id="@+id/spinnerNum"
@@ -145,10 +153,12 @@
                     android:text="성별"
                     android:textAlignment="center"
                     android:textSize="20sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/spinnerGender"
                     android:layout_width="wrap_content"
