@@ -7,10 +7,10 @@
     android:padding="20dp">
 
     <LinearLayout
-        android:background="@drawable/bg_edit_stroke_grayc8c8_2"
         android:id="@+id/layoutTmap"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/bg_edit_stroke_grayc8c8_2"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/layoutSetting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,22 +41,24 @@
 
             <TextView
                 android:id="@+id/choiceStart"
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:text="출발"
                 android:textSize="20sp" />
+
             <Spinner
                 android:id="@+id/spinnerStart"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/textStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="90dp"
             android:padding="5dp"
             android:singleLine="true"
             android:textSize="15sp"
@@ -73,7 +75,7 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
@@ -83,14 +85,14 @@
             <Spinner
                 android:id="@+id/spinnerDest"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/textDest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="90dp"
             android:padding="5dp"
             android:singleLine="true"
             android:textSize="15sp"
@@ -115,15 +117,18 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
                     android:text="인원"
                     android:textSize="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
 
                 <Spinner
                     android:id="@+id/spinnerNum"
-                    android:layout_width="80dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/num"
                     android:spinnerMode="dropdown" />
@@ -136,17 +141,19 @@
 
                 <TextView
                     android:layout_width="80dp"
-                    android:textAlignment="center"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
                     android:text="성별"
+                    android:textAlignment="center"
                     android:textSize="20sp" />
-
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
                 <Spinner
-                    android:entries="@array/gender"
                     android:id="@+id/spinnerGender"
-                    android:layout_width="80dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/gender"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
         </LinearLayout>
@@ -164,9 +171,9 @@
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:text="출발시간"
-                android:layout_marginStart="5dp"
                 android:textSize="20sp" />
 
             <View
@@ -179,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                tools:text="설정한 시간 보여주기" />
+                tools:text="15:05" />
 
             <View
                 android:layout_width="0dp"
