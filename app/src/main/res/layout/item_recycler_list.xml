@@ -4,24 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/bg_edit_stroke_grayc8c8_2"
     android:paddingHorizontal="20dp"
     android:paddingVertical="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/list_creatorProfileImage"
         android:layout_width="100dp"
-        android:padding="5dp"
         android:layout_height="100dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toTopOf="@id/layoutCreator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/default_profile" />
 
     <LinearLayout
-        android:layout_marginTop="5dp"
         android:id="@+id/layoutCreator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/list_creatorProfileImage"
         app:layout_constraintStart_toStartOf="@id/list_creatorProfileImage"
