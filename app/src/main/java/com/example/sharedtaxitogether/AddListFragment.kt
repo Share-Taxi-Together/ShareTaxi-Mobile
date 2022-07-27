@@ -1,5 +1,6 @@
 package com.example.sharedtaxitogether
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
@@ -11,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.sharedtaxitogether.databinding.FragmentAddBinding
@@ -42,70 +42,9 @@ class AddListFragment : Fragment() {
         checkAdd()
 
         binding = FragmentAddBinding.inflate(layoutInflater)
-
-
     }
 
-    private fun checkAdd() {
-//        Log.d("here checkAdd", "호출")
-        val builder = AlertDialog.Builder(mainActivity)
-        builder.setMessage("합승인원을 구하시겠습니까?")
-            .setPositiveButton("네") { _, _ ->
 
-                val adapter = ArrayAdapter(mainActivity, android.R.layout.simple_list_item_1, nameList)
-//                val myAdapter = object : ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1){
-//
-//                    override fun getView(
-//                        position: Int,
-//                        convertView: View?,
-//                        parent: ViewGroup
-//                    ): View {
-//                        val v = super.getView(position, convertView, parent)
-//
-//                        if(position == count){
-//                            (v.findViewById<View>(R.id.spinnerStart) as TextView).text = ""
-//                            (v.findViewById<View>(R.id.spinnerStart) as TextView).text
-//                        }
-//                    }
-//
-//                }
-
-                binding.spinnerStart.adapter = adapter
-                binding.spinnerDest.adapter = adapter
-
-                binding.spinnerStart.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            var start = binding.spinnerStart.getItemAtPosition(position).toString()
-                            binding.textStart.text = placeList[position].address
-                        }
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
-                    }
-
-                binding.spinnerDest.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            var dest = binding.spinnerDest.getItemAtPosition(position).toString()
-                            binding.textDest.text = placeList[position].address
-                        }
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
-                    }
-            }
-            .setNegativeButton("아니요") { _, _ ->
-                 startActivity(Intent(mainActivity, MainActivity::class.java))
-            }
-        builder.show()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,12 +53,7 @@ class AddListFragment : Fragment() {
 
         binding.spinnerNum.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // TODO num 값 활용하기
                 var num = binding.spinnerNum.getItemAtPosition(position).toString()
             }
@@ -127,14 +61,10 @@ class AddListFragment : Fragment() {
 
         binding.spinnerGender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // TODO gender 값 활용하기
-                var gender = binding.spinnerGender.getItemAtPosition(position).toString()
+                val gender = binding.spinnerGender.getItemAtPosition(position).toString()
+                Log.d("here gender", gender)
             }
         }
 
@@ -155,16 +85,54 @@ class AddListFragment : Fragment() {
                     nameList.add(document["id"] as String)
                     placeList.add(item)
                 }
-                Log.d("here placeList", placeList[2].name)
-                Log.d("here placeList", placeList[2].address)
+                placeList.add(PlaceLayout("선택", ""))
+                nameList.add("--선택--")
             }
     }
 
+    private fun checkAdd() {
+        val builder = AlertDialog.Builder(mainActivity)
+        builder.setMessage("합승인원을 구하시겠습니까?")
+            .setPositiveButton("네") { _, _ ->
+                setSpinner()
+            }
+            .setNegativeButton("아니요") { _, _ ->
+                startActivity(Intent(mainActivity, MainActivity::class.java))
+            }
+        builder.show()
+    }
+
+    private fun setSpinner() {
+        val adapter = ArrayAdapter(mainActivity, R.layout.simple_list_item_1, nameList)
+
+        binding.spinnerStart.adapter = adapter
+        binding.spinnerDest.adapter = adapter
+
+        binding.spinnerStart.setSelection(nameList.size-1)
+        binding.spinnerDest.setSelection(nameList.size-1)
+
+        binding.spinnerStart.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    var start = binding.spinnerStart.getItemAtPosition(position).toString()
+                    binding.textStart.text = placeList[position].address
+                    Log.d("here111", position.toString())
+                }
+            }
+
+        binding.spinnerDest.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    var dest = binding.spinnerDest.getItemAtPosition(position).toString()
+                    binding.textDest.text = placeList[position].address
+                }
+            }
+    }
 
     @SuppressLint("SimpleDateFormat")
     private fun getTime() {
-        Log.d("here getTime()", "호출됐어")
-
         val cal = Calendar.getInstance()
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
@@ -174,13 +142,8 @@ class AddListFragment : Fragment() {
             binding.timeText.text = SimpleDateFormat("HH:mm").format(cal.time)
         }
 
-        TimePickerDialog(
-            mainActivity,
-            timeSetListener,
-            cal.get(Calendar.HOUR_OF_DAY),
-            cal.get(Calendar.MINUTE),
-            true
-        ).show()
+        TimePickerDialog(mainActivity, timeSetListener,
+            cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
     }
 
 //    private fun showTimePicker() {
