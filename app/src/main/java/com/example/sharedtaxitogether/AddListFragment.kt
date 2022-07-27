@@ -3,6 +3,7 @@ package com.example.sharedtaxitogether
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.sharedtaxitogether.databinding.FragmentAddBinding
@@ -25,6 +27,9 @@ class AddListFragment : Fragment() {
     private val placeList = arrayListOf<PlaceLayout>()
     private val nameList = arrayListOf<String>()
 
+    // TODO LiveData 합승정보 추가 및 observer
+    // todo 출발, 도착 장소 다른지 체크
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -38,9 +43,7 @@ class AddListFragment : Fragment() {
 
         binding = FragmentAddBinding.inflate(layoutInflater)
 
-        val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, nameList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        binding.spinnerDest.adapter = adapter
+
     }
 
     private fun checkAdd() {
@@ -49,20 +52,26 @@ class AddListFragment : Fragment() {
         builder.setMessage("합승인원을 구하시겠습니까?")
             .setPositiveButton("네") { _, _ ->
 
-                binding.spinnerDest.onItemSelectedListener =
-                    object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            Log.d("here choiceDest", position.toString())
-                            var dest = binding.spinnerDest.getItemAtPosition(position).toString()
-                            binding.textDest.text = placeList[position].address
-                        }
-                        override fun onNothingSelected(parent: AdapterView<*>?) {}
-                    }
+                val adapter = ArrayAdapter(mainActivity, android.R.layout.simple_list_item_1, nameList)
+//                val myAdapter = object : ArrayAdapter<String>(mainActivity, android.R.layout.simple_list_item_1){
+//
+//                    override fun getView(
+//                        position: Int,
+//                        convertView: View?,
+//                        parent: ViewGroup
+//                    ): View {
+//                        val v = super.getView(position, convertView, parent)
+//
+//                        if(position == count){
+//                            (v.findViewById<View>(R.id.spinnerStart) as TextView).text = ""
+//                            (v.findViewById<View>(R.id.spinnerStart) as TextView).text
+//                        }
+//                    }
+//
+//                }
+
+                binding.spinnerStart.adapter = adapter
+                binding.spinnerDest.adapter = adapter
 
                 binding.spinnerStart.onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
@@ -72,17 +81,28 @@ class AddListFragment : Fragment() {
                             position: Int,
                             id: Long
                         ) {
-                            Log.d("here choiceStart", position.toString())
                             var start = binding.spinnerStart.getItemAtPosition(position).toString()
                             binding.textStart.text = placeList[position].address
                         }
                         override fun onNothingSelected(parent: AdapterView<*>?) {}
                     }
 
-
+                binding.spinnerDest.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            var dest = binding.spinnerDest.getItemAtPosition(position).toString()
+                            binding.textDest.text = placeList[position].address
+                        }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {}
+                    }
             }
             .setNegativeButton("아니요") { _, _ ->
-
+                 startActivity(Intent(mainActivity, MainActivity::class.java))
             }
         builder.show()
     }
@@ -91,26 +111,6 @@ class AddListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        binding = FragmentAddBinding.inflate(layoutInflater)
-//
-//        val adapter = ArrayAdapter(context!!, android.R.layout.simple_list_item_1, nameList)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        binding.spinnerDest.adapter = adapter
-        Log.d("here onCreateView", "onCreateView")
-
-
-//        binding.choiceStart.setOnClickListener {
-//            Log.d("here choiceStart", "호출")
-//
-//            val dialog = ChoicePlaceDialog(mainActivity, nameList)
-//            dialog.myDialog()
-//
-//            dialog.setOnClickListener(object : ChoicePlaceDialog.OnDialogClickListener {
-//                override fun onClicked(position: Int) {
-//                    binding.textStart.text = placeList[position].name + placeList[position].address
-//                }
-//            })
-//        }
 
         binding.spinnerNum.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -120,8 +120,6 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.d("here num", "호출")
-
                 // TODO num 값 활용하기
                 var num = binding.spinnerNum.getItemAtPosition(position).toString()
             }
@@ -135,8 +133,6 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.d("here gender", "호출")
-
                 // TODO gender 값 활용하기
                 var gender = binding.spinnerGender.getItemAtPosition(position).toString()
             }
@@ -150,7 +146,6 @@ class AddListFragment : Fragment() {
     }
 
     private fun getPlace() {
-        Log.d("here getPlace()", "호출됐어")
         db.collection("places")
             .get()
             .addOnSuccessListener { result ->

@@ -48,7 +48,6 @@
                 android:text="출발"
                 android:textSize="20sp" />
             <Spinner
-                android:entries="@array/place"
                 android:id="@+id/spinnerStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -82,7 +81,6 @@
                 android:textSize="20sp" />
 
             <Spinner
-                android:entries="@array/place"
                 android:id="@+id/spinnerDest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
