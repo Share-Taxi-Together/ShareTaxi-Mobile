@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.example.sharedtaxitogether.databinding.FragmentAddBinding
+import com.example.sharedtaxitogether.model.Place
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,7 +25,7 @@ class AddListFragment : Fragment() {
     private lateinit var binding: FragmentAddBinding
     private val db = FirebaseFirestore.getInstance()
 
-    private val placeList = arrayListOf<PlaceLayout>()
+    private val placeList = arrayListOf<Place>()
     private val nameList = arrayListOf<String>()
 
     // TODO LiveData 합승정보 추가 및 observer
@@ -91,11 +92,11 @@ class AddListFragment : Fragment() {
             .addOnSuccessListener { result ->
                 nameList.clear()
                 for (document in result) {
-                    val item = PlaceLayout(document["id"] as String, document["address"] as String)
+                    val item = Place(document["id"] as String, document["address"] as String)
                     nameList.add(document["id"] as String)
                     placeList.add(item)
                 }
-                placeList.add(PlaceLayout("선택", ""))
+                placeList.add(Place("선택", ""))
                 nameList.add("--선택--")
             }
     }
