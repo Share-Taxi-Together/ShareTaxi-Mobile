@@ -2,28 +2,27 @@ package com.example.sharedtaxitogether
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.room.Room
+import com.bumptech.glide.Glide
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
 import com.example.sharedtaxitogether.dialog.EditCountAddressDialog
-//import com.example.sharedtaxitogether.dialog.EditDialog
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
 import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
     lateinit var mainActivity: MainActivity
@@ -65,8 +64,11 @@ class ProfileFragment : Fragment() {
                 }
                 if(room.userDao().getImgUrl().isNullOrBlank())
                     binding.profileImgView.setImageResource(R.drawable.default_profile)
-                else binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
-
+                else{
+                    Glide.with(mainActivity)
+                        .load(room.userDao().getImgUrl())
+                        .into(binding.profileImgView)
+                }
                 binding.nicknameTextView.text = room.userDao().getNickname()
                 binding.scoreTextView.text = room.userDao().getScore()
                 binding.emailTextView.text = room.userDao().getEmail()
@@ -174,6 +176,22 @@ class ProfileFragment : Fragment() {
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
 
+    private fun uploadImageToFirebase(uri: Uri, userId: String){
+        val storage: FirebaseStorage = FirebaseStorage.getInstance()
+        val fileName = "IMAGE_${userId}_.png"
+
+        val imgRef = storage.reference.child("images/profile/").child(fileName)
+
+        imgRef.putFile(uri).continueWithTask {
+            return@continueWithTask imgRef.downloadUrl
+        }.addOnSuccessListener {
+            Log.d("here imgUrl", it.toString())
+            modifyInfo("imgUrl", it.toString())
+        }.addOnFailureListener {
+            Log.d("here fail", it.toString())
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             binding.profileImgView.setImageURI(data?.data)
@@ -185,7 +203,8 @@ class ProfileFragment : Fragment() {
                 ) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                modifyInfo("imgUrl", data?.data.toString())
+                // storage에 이미지 업로드
+                uploadImageToFirebase(data?.data!!, room.userDao().getUid())
             }
         }
     }
