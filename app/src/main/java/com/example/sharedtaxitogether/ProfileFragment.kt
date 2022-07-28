@@ -2,28 +2,27 @@ package com.example.sharedtaxitogether
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.room.Room
+import com.bumptech.glide.Glide
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
 import com.example.sharedtaxitogether.dialog.EditCountAddressDialog
-//import com.example.sharedtaxitogether.dialog.EditDialog
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
 import com.example.sharedtaxitogether.dialog.EditPasswordDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
     lateinit var mainActivity: MainActivity
@@ -63,10 +62,13 @@ class ProfileFragment : Fragment() {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
                 }
-                if(room.userDao().getImgUrl().isNullOrBlank())
+                if (room.userDao().getImgUrl().isBlank())
                     binding.profileImgView.setImageResource(R.drawable.default_profile)
-                else binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
-
+                else {
+                    Glide.with(mainActivity)
+                        .load(room.userDao().getImgUrl())
+                        .into(binding.profileImgView)
+                }
                 binding.nicknameTextView.text = room.userDao().getNickname()
                 binding.scoreTextView.text = room.userDao().getScore()
                 binding.emailTextView.text = room.userDao().getEmail()
@@ -87,7 +89,7 @@ class ProfileFragment : Fragment() {
             val dialog = EditNicknameDialog(mainActivity)
             dialog.myDialog()
 
-            dialog.setOnClickListener(object: EditNicknameDialog.OnDialogClickListener{
+            dialog.setOnClickListener(object : EditNicknameDialog.OnDialogClickListener {
                 override fun onClicked(nickname: String) {
                     binding.nicknameTextView.text = nickname
                     modifyInfo("nickname", nickname)
@@ -121,7 +123,7 @@ class ProfileFragment : Fragment() {
             val dialog = EditCountAddressDialog(mainActivity)
             dialog.myDialog()
 
-            dialog.setOnClickListener(object: EditCountAddressDialog.OnDialogClickListener{
+            dialog.setOnClickListener(object : EditCountAddressDialog.OnDialogClickListener {
                 override fun onClicked(countAddress: String) {
                     binding.countAddressTextView.text = countAddress
                     modifyInfo("countAddress", countAddress)
@@ -174,18 +176,34 @@ class ProfileFragment : Fragment() {
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
 
+    private fun uploadImageToFirebase(uri: Uri, userId: String) {
+        val storage: FirebaseStorage = FirebaseStorage.getInstance()
+        val fileName = "IMAGE_${userId}_.png"
+
+        val imgRef = storage.reference.child("images/profile/").child(fileName)
+
+        imgRef.putFile(uri).continueWithTask {
+            return@continueWithTask imgRef.downloadUrl
+        }.addOnSuccessListener {
+            modifyInfo("imgUrl", it.toString())
+        }.addOnFailureListener {
+            Log.d(TAG + "fail", it.toString())
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             binding.profileImgView.setImageURI(data?.data)
-            Log.d("profileData", data?.data.toString())
+            Log.d(TAG + "profileData", data?.data.toString())
 
             if (ContextCompat.checkSelfPermission(
                     mainActivity,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) ==
-                PackageManager.PERMISSION_GRANTED
+                )
+                == PackageManager.PERMISSION_GRANTED
             ) {
-                modifyInfo("imgUrl", data?.data.toString())
+                // storage에 이미지 업로드
+                uploadImageToFirebase(data?.data!!, room.userDao().getUid())
             }
         }
     }
@@ -205,14 +223,11 @@ class ProfileFragment : Fragment() {
                 db.collection("users").document(token)
                     .delete()
                     .addOnSuccessListener {
-                        Log.d(TAG, "회원탈퇴 성공")
                         startActivity(Intent(mainActivity, LoginActivity::class.java))
                         activity?.finish()
                     }
             }
-            .setNegativeButton("취소") { _, _ ->
-                Log.d(TAG, "회원탈퇴 취소")
-            }
+            .setNegativeButton("취소") { _, _ -> }
         builder.show()
         pref.editor.clear().commit()
     }
@@ -228,7 +243,7 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "profileFragment"
-        private val IMAGE_PICK_CODE = 1000
+        private const val TAG = "profileFrag/"
+        private const val IMAGE_PICK_CODE = 1000
     }
 }
