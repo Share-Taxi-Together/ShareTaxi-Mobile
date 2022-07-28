@@ -62,9 +62,9 @@ class ProfileFragment : Fragment() {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
                 }
-                if(room.userDao().getImgUrl().isNullOrBlank())
+                if (room.userDao().getImgUrl().isBlank())
                     binding.profileImgView.setImageResource(R.drawable.default_profile)
-                else{
+                else {
                     Glide.with(mainActivity)
                         .load(room.userDao().getImgUrl())
                         .into(binding.profileImgView)
@@ -89,7 +89,7 @@ class ProfileFragment : Fragment() {
             val dialog = EditNicknameDialog(mainActivity)
             dialog.myDialog()
 
-            dialog.setOnClickListener(object: EditNicknameDialog.OnDialogClickListener{
+            dialog.setOnClickListener(object : EditNicknameDialog.OnDialogClickListener {
                 override fun onClicked(nickname: String) {
                     binding.nicknameTextView.text = nickname
                     modifyInfo("nickname", nickname)
@@ -123,7 +123,7 @@ class ProfileFragment : Fragment() {
             val dialog = EditCountAddressDialog(mainActivity)
             dialog.myDialog()
 
-            dialog.setOnClickListener(object: EditCountAddressDialog.OnDialogClickListener{
+            dialog.setOnClickListener(object : EditCountAddressDialog.OnDialogClickListener {
                 override fun onClicked(countAddress: String) {
                     binding.countAddressTextView.text = countAddress
                     modifyInfo("countAddress", countAddress)
@@ -176,7 +176,7 @@ class ProfileFragment : Fragment() {
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
 
-    private fun uploadImageToFirebase(uri: Uri, userId: String){
+    private fun uploadImageToFirebase(uri: Uri, userId: String) {
         val storage: FirebaseStorage = FirebaseStorage.getInstance()
         val fileName = "IMAGE_${userId}_.png"
 
@@ -185,23 +185,22 @@ class ProfileFragment : Fragment() {
         imgRef.putFile(uri).continueWithTask {
             return@continueWithTask imgRef.downloadUrl
         }.addOnSuccessListener {
-            Log.d("here imgUrl", it.toString())
             modifyInfo("imgUrl", it.toString())
         }.addOnFailureListener {
-            Log.d("here fail", it.toString())
+            Log.d(TAG + "fail", it.toString())
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             binding.profileImgView.setImageURI(data?.data)
-            Log.d("profileData", data?.data.toString())
+            Log.d(TAG + "profileData", data?.data.toString())
 
             if (ContextCompat.checkSelfPermission(
                     mainActivity,
                     android.Manifest.permission.READ_EXTERNAL_STORAGE
-                ) ==
-                PackageManager.PERMISSION_GRANTED
+                )
+                == PackageManager.PERMISSION_GRANTED
             ) {
                 // storage에 이미지 업로드
                 uploadImageToFirebase(data?.data!!, room.userDao().getUid())
@@ -224,14 +223,11 @@ class ProfileFragment : Fragment() {
                 db.collection("users").document(token)
                     .delete()
                     .addOnSuccessListener {
-                        Log.d(TAG, "회원탈퇴 성공")
                         startActivity(Intent(mainActivity, LoginActivity::class.java))
                         activity?.finish()
                     }
             }
-            .setNegativeButton("취소") { _, _ ->
-                Log.d(TAG, "회원탈퇴 취소")
-            }
+            .setNegativeButton("취소") { _, _ -> }
         builder.show()
         pref.editor.clear().commit()
     }
@@ -247,7 +243,7 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "profileFragment"
-        private val IMAGE_PICK_CODE = 1000
+        private const val TAG = "profileFrag/"
+        private const val IMAGE_PICK_CODE = 1000
     }
 }
