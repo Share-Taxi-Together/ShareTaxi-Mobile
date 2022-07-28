@@ -128,6 +128,7 @@
             <Button
                 android:id="@+id/editEmail"
                 android:layout_width="65dp"
+                android:enabled="false"
                 android:layout_height="wrap_content"
                 android:text="수정"
                 android:textSize="15sp" />
@@ -205,6 +206,7 @@
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:text="수정"
+                android:enabled="false"
                 android:textSize="15sp" />
         </LinearLayout>
         <ImageView

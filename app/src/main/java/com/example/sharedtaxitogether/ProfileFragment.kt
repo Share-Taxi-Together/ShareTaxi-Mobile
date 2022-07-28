@@ -13,12 +13,15 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.room.Room
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.sharedtaxitogether.databinding.FragmentProfileBinding
 import com.example.sharedtaxitogether.dialog.EditCountAddressDialog
 import com.example.sharedtaxitogether.dialog.EditNicknameDialog
 import com.example.sharedtaxitogether.dialog.EditPasswordDialog
+import com.example.sharedtaxitogether.viewModel.LoginViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -26,10 +29,10 @@ import com.google.firebase.storage.FirebaseStorage
 
 class ProfileFragment : Fragment() {
     lateinit var mainActivity: MainActivity
+    private val viewModel: LoginViewModel by activityViewModels()
     private lateinit var binding: FragmentProfileBinding
     private lateinit var db: FirebaseFirestore
-    private lateinit var room: AppDatabase
-    private val pref: UserSharedPreferences by lazy { UserSharedPreferences(mainActivity) }
+    private lateinit var auth: FirebaseAuth
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,46 +44,37 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater)
+        auth = Firebase.auth
         db = Firebase.firestore
 
         bind()
-
-        room = Room.databaseBuilder(
-            mainActivity,
-            AppDatabase::class.java, "UserDB"
-        ).allowMainThreadQueries().build()
-
         initView()
 
         return binding.root
     }
 
     private fun initView() {
-        Thread {
-            activity?.runOnUiThread {
-                when (room.userDao().getGender()) {
-                    "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
-                    "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
-                }
-                if (room.userDao().getImgUrl().isBlank())
-                    binding.profileImgView.setImageResource(R.drawable.default_profile)
-                else {
-                    Glide.with(mainActivity)
-                        .load(room.userDao().getImgUrl())
-                        .into(binding.profileImgView)
-                }
-                binding.nicknameTextView.text = room.userDao().getNickname()
-                binding.scoreTextView.text = room.userDao().getScore()
-                binding.emailTextView.text = room.userDao().getEmail()
-                var pw = ""
-                for (i in 1..room.userDao().getPassword().length) {
-                    pw += "*"
-                }
-                binding.passwdTextView.text = pw
-                binding.phoneTextView.text = room.userDao().getPhone()
-                binding.countAddressTextView.text = room.userDao().getCountAddress()
-            }
-        }.start()
+        when (viewModel.gender.value) {
+            "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
+            "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
+        }
+        if (viewModel.imgUrl.value!!.isBlank())
+            binding.profileImgView.setImageResource(R.drawable.default_profile)
+        else {
+            Glide.with(mainActivity)
+                .load(viewModel.imgUrl.value)
+                .into(binding.profileImgView)
+        }
+        binding.nicknameTextView.text = viewModel.nickname.value
+        binding.scoreTextView.text = viewModel.score.value
+        binding.emailTextView.text = auth.currentUser!!.email
+        var pw = ""
+        for (i in 1..viewModel.password.value!!.length) {
+            pw += "*"
+        }
+        binding.passwdTextView.text = pw
+        binding.phoneTextView.text = auth.currentUser!!.phoneNumber
+        binding.countAddressTextView.text = viewModel.countAddress.value
     }
 
     private fun bind() {
@@ -102,7 +96,7 @@ class ProfileFragment : Fragment() {
 //            showDialog("email",binding.emailTextView)
 //        }
         binding.editPassword.setOnClickListener {
-            val passwordDialog = EditPasswordDialog(mainActivity, pref.getStringValue("password"))
+            val passwordDialog = EditPasswordDialog(mainActivity, viewModel.password.value!!)
             passwordDialog.myDialog()
 
             passwordDialog.setOnClickListener(object : EditPasswordDialog.OnDialogClickListener {
@@ -203,40 +197,42 @@ class ProfileFragment : Fragment() {
                 == PackageManager.PERMISSION_GRANTED
             ) {
                 // storage에 이미지 업로드
-                uploadImageToFirebase(data?.data!!, room.userDao().getUid())
+                uploadImageToFirebase(data?.data!!, viewModel.uid.value!!)
             }
         }
     }
 
     private fun modifyInfo(field: String, value: String) {
-        db.collection("users").document(room.userDao().getUid())
+        db.collection("users").document(viewModel.uid.value!!)
             .update(field, value)
-        pref.putValue(field, value)
+
+        when(field){
+            "imgUrl" -> viewModel.imgUrl.value = value
+            "nickname" -> viewModel.nickname.value = value
+            "password" -> viewModel.password.value = value
+            "countAddress" -> viewModel.countAddress.value = value
+        }
     }
 
     private fun withdraw() {
         val builder = AlertDialog.Builder(mainActivity)
         builder.setTitle("회원탈퇴")
-            .setMessage("${room.userDao().getNickname()}님 정말 탈퇴하시겠습니까?")
+            .setMessage("${viewModel.nickname.value}님 정말 탈퇴하시겠습니까?")
             .setPositiveButton("탈퇴하기") { _, _ ->
-                val token = room.userDao().getUid()
-                db.collection("users").document(token)
+                db.collection("users").document(viewModel.uid.value!!)
                     .delete()
                     .addOnSuccessListener {
                         startActivity(Intent(mainActivity, LoginActivity::class.java))
                         activity?.finish()
                     }
+                auth.currentUser!!.delete()
             }
             .setNegativeButton("취소") { _, _ -> }
         builder.show()
-        pref.editor.clear().commit()
     }
 
     private fun logout() {
-        val user = room.userDao().getUser()
-        room.userDao().delete(user)
-
-        pref.editor.clear().commit()
+        auth.signOut()
 
         startActivity(Intent(mainActivity, LoginActivity::class.java))
         activity?.finish()
