@@ -24,8 +24,8 @@ class LoginViewModel : ViewModel() {
             nickname.value!!,
             password.value!!,
             score.value!!,
-            imgUrl.value,
-            countAddress.value
+            imgUrl.value!!,
+            countAddress.value!!
         )
     }
 }
