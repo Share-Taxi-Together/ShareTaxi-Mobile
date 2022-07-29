@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="viewModel"
             type="com.example.sharedtaxitogether.viewModel.UserInfoViewModel" />
@@ -52,7 +54,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="5dp"
                 android:text="@string/email"
                 android:textSize="18sp" />
 
@@ -65,31 +67,21 @@
                 <EditText
                     android:id="@+id/editEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:inputType="textEmailAddress"
                     android:paddingStart="8dp" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="8dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:text=" @tukorea.ac.kr"-->
-<!--                    android:textAlignment="center"-->
-<!--                    android:textColor="@color/colorGray8c8c"-->
-<!--                    android:textSize="18sp"-->
-<!--                    android:textStyle="bold" />-->
-
-                <TextView
-                    android:id="@+id/textEmailCheck"
+                <Button
+                    android:id="@+id/btnSendMail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="2"
-                    android:text="이메일확인"
+                    android:enabled="false"
+                    android:text="메일전송"
                     android:textAlignment="center"
                     android:textColor="@color/colorGray8c8c"
                     android:textSize="18sp"
@@ -109,113 +101,87 @@
                     android:text="메일인증코드"
                     android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/editEmailCode"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="8dp" />
-
-                <Button
-                    android:id="@+id/btnEmailCodeCheck"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:enabled="false"
-                    android:text="@string/OK"
-                    android:textColor="@color/colorGray8c8c"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:gravity="center">
 
-        <LinearLayout
-            android:id="@+id/layoutStep2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+                    <EditText
+                        android:id="@+id/editEmailCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="8dp" />
+
+                    <Button
+                        android:id="@+id/btnEmailCheck"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="2"
+                        android:enabled="false"
+                        android:text="인증"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorGray8c8c"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:hint="@string/phoneExample"
-                android:text="@string/phone"
+                android:layout_marginBottom="5dp"
+                android:text="비밀번호"
                 android:textSize="18sp" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/editPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="10dp"
+                android:enabled="false"
+                android:inputType="textPassword"
+                android:paddingStart="8dp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:gravity="center">
+                android:layout_marginStart="8dp"
+                android:text="@string/passwordConfirm"
+                android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/editPhone"
-                    android:layout_width="300dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="3"
-                    android:inputType="phone"
-                    android:paddingStart="8dp" />
-
-                <TextView
-                    android:id="@+id/textPhoneCheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="인증"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorGray8c8c"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/editPasswordConfirm"
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="20dp"
+                android:enabled="false"
+                android:inputType="textPassword"
+                android:paddingStart="8dp" />
+
+            <Button
+                android:id="@+id/btnNextStep"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="번호인증코드"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/editPhoneCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="8dp" />
-
-                <Button
-                    android:id="@+id/btnPhoneCodeCheck"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:enabled="false"
-                    android:text="@string/OK"
-                    android:textColor="@color/colorGray8c8c"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:layout_gravity="center"
+                android:enabled="false"
+                android:text="다음"
+                android:textColor="@color/colorGray8c8c"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutStep3"
+            android:id="@+id/layoutStep2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -272,50 +238,99 @@
                 android:maxLength="10"
                 android:paddingStart="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/password"
-                android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/editPassword"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="20dp"
-                android:enabled="false"
-                android:inputType="textPassword"
-                android:paddingStart="8dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/passwordConfirm"
+                android:layout_marginTop="20dp"
+                android:text="@string/phone"
                 android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/editPasswordConfirm"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginBottom="20dp"
-                android:enabled="false"
-                android:inputType="textPassword"
-                android:paddingStart="8dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/btnSignup"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="50dp"
-                android:enabled="false"
-                android:text="@string/signup"
-                android:textColor="@color/colorGray8c8c"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                <EditText
+                    android:id="@+id/editPhone"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="3"
+                    android:inputType="phone"
+                    android:paddingStart="8dp" />
+
+                <Button
+                    android:id="@+id/btnSendMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:enabled="false"
+                    android:text="SMS전송"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorGray8c8c"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="번호인증코드"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/editPhoneCode"
+                        android:layout_width="300dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="3"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="8dp" />
+
+                    <Button
+                        android:id="@+id/btnPhoneCodeCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="인증"
+                        android:textColor="@color/colorGray8c8c"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/btnSignup"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="50dp"
+                    android:enabled="false"
+                    android:text="@string/signup"
+                    android:textColor="@color/colorGray8c8c"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </layout>

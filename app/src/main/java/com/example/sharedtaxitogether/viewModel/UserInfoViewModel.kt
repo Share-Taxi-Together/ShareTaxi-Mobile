@@ -1,6 +1,5 @@
 package com.example.sharedtaxitogether.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -12,14 +11,15 @@ class UserInfoViewModel : ViewModel() {
     var nickname = MutableLiveData<String>()
     var password = MutableLiveData<String>()
     var score = MutableLiveData<String>()         //점수(노쇼 방지)
+    var imgUrl = MutableLiveData<String>()
+    var countAddress = MutableLiveData<String>()
 
     var existEmail = MutableLiveData<Boolean>()
     var existPhone = MutableLiveData<Boolean>()
 
     init {
-        Log.i("SignupViewModel", "SignupViewModel Created!!")
         score.value = "0"
+        imgUrl.value = ""
+        countAddress.value = ""
     }
-
-
 }
