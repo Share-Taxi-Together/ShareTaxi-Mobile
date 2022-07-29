@@ -28,6 +28,11 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
         db = Firebase.firestore
 
+        if(intent.hasExtra("email") && intent.hasExtra("password")){
+            binding.loginMailEdit.setText(intent.getStringExtra("email"))
+            binding.loginPasswdEdit.setText(intent.getStringExtra("password"))
+        }
+
         bind()
     }
 
