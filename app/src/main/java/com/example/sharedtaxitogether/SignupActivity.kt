@@ -106,6 +106,7 @@ class SignupActivity : AppCompatActivity() {
 
         binding.textPhoneCheck.setOnClickListener {
             sendMessage()
+            Log.d("here", phoneAuthNum)
         }
         binding.btnPhoneCodeCheck.setOnClickListener {
             messageCodeCheck()
@@ -241,6 +242,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun signInWithPhoneAuthCredential(phoneAuthCredential: PhoneAuthCredential) {
+        binding.editPhoneCode.setText(phoneAuthNum)
         if (binding.editPhoneCode.text.toString() == phoneAuthNum) {
             auth.signInWithCredential(phoneAuthCredential)
                 .addOnCompleteListener(this) { task ->
@@ -253,6 +255,20 @@ class SignupActivity : AppCompatActivity() {
             Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
         }
     }
+
+/*    private fun signInWithPhoneAuthCredential(phoneAuthCredential: PhoneAuthCredential) {
+        if (binding.editPhoneCode.text.toString() == phoneAuthNum) {
+            auth.signInWithCredential(phoneAuthCredential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        binding.layoutStep2.visibility = View.GONE
+                        binding.layoutStep3.visibility = View.VISIBLE
+                    }
+                }
+        } else {
+            Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
+        }
+    }*/
 
     private fun duplicateNicknameCheck() {
         val nickname = binding.editNickname.text.toString()

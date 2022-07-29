@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
                     "Male" -> binding.genderImgView.setImageResource(R.drawable.male)
                     "Female" -> binding.genderImgView.setImageResource(R.drawable.female)
                 }
-                binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
+                //binding.profileImgView.setImageURI(room.userDao().getImgUrl().toUri())
                 binding.nicknameTextView.text = room.userDao().getNickname()
                 binding.scoreTextView.text = room.userDao().getScore()
                 binding.emailTextView.text = room.userDao().getEmail()
