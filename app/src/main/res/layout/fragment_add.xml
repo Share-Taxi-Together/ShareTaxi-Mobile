@@ -10,6 +10,7 @@
         android:id="@+id/layoutTmap"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/bg_edit_stroke_grayc8c8_2"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@id/layoutSetting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,50 +18,47 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:padding="10dp"
         android:id="@+id/layoutSetting"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutTmap">
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/choiceStart"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
-                android:text="출발지"
+                android:text="출발"
                 android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/spinnerStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-
-            <TextView
-                android:id="@+id/textStart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:singleLine="true"
-                android:textSize="15sp"
-                tools:text="시흥시 정왕동,,," />
+                android:spinnerMode="dialog" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:paddingHorizontal="5dp"
+            android:singleLine="true"
+            android:textSize="15sp"
+            tools:text="시흥시 정왕동,,," />
 
         <View
             android:layout_width="0dp"
@@ -70,32 +68,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
-                android:text="도착지"
+                android:text="도착"
                 android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/spinnerDest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-
-            <TextView
-                android:id="@+id/textDest"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:singleLine="true"
-                android:textSize="15sp"
-                tools:text="시흥시 정왕동,,," />
+                android:spinnerMode="dialog" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textDest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:paddingHorizontal="5dp"
+            android:singleLine="true"
+            android:textSize="15sp"
+            tools:text="시흥시 정왕동,,," />
+
+        <TextView
+            android:id="@+id/addPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="5dp"
+            android:text="혹시 원하는 장소가 없나요?"
+            android:textColor="@color/purple_500"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
@@ -106,50 +114,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginStart="5dp"
             android:gravity="center"
             android:padding="5dp">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="20dp"
                     android:text="인원"
                     android:textSize="20sp" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <Spinner
                     android:id="@+id/spinnerNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/num"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
                     android:text="성별"
+                    android:textAlignment="center"
                     android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <Spinner
                     android:id="@+id/spinnerGender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:entries="@array/gender"
                     android:spinnerMode="dropdown" />
-
             </LinearLayout>
-
-
         </LinearLayout>
 
         <View
@@ -163,8 +179,9 @@
             android:padding="5dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:text="출발시간"
                 android:textSize="20sp" />
@@ -175,10 +192,11 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/timeText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                tools:text="설정한 시간 보여주기" />
+                tools:text="15:05" />
 
             <View
                 android:layout_width="0dp"
@@ -186,6 +204,7 @@
                 android:layout_weight="1" />
 
             <ImageView
+                android:id="@+id/timepicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
@@ -202,7 +221,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="추가하기" />
+            android:text="합승인원 구하기" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

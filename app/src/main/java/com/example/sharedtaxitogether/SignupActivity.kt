@@ -1,6 +1,5 @@
 package com.example.sharedtaxitogether
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +8,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
@@ -34,6 +32,7 @@ class SignupActivity : AppCompatActivity() {
 
     private var code = "-1"                 //이메일 인증코드
     private var phoneAuthNum = ""           //sms 인증코드
+    private lateinit var phoneCredential: PhoneAuthCredential
     private var storedVerificationId = ""   //인증완료시 부여되는 Id
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,36 +42,25 @@ class SignupActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         viewModel.existEmail.observe(this) {
-            if (isEmailValid(viewModel.email.value!!)) {
-                if (it) {
-                    binding.editEmail.error = "이미 같은 메일이 존재합니다"
-                    binding.textEmailCheck.isEnabled = false
-                    binding.textEmailCheck.setTextColor(
-                        ContextCompat.getColor(this, R.color.colorGray8c8c)
-                    )
-
-                } else {
-                    binding.textEmailCheck.setTextColor(
-                        ContextCompat.getColor(this, R.color.colorGreen)
-                    )
-                    binding.textEmailCheck.isEnabled = true
-                }
+            if (it) {
+                binding.editEmail.error = "이미 같은 메일이 존재합니다"
+                binding.btnSendMail.isEnabled = false
+//                binding.btnSendMail.setTextColor(
+//                    ContextCompat.getColor(this, R.color.colorGray8c8c))
+            } else {
+//                binding.btnSendMail.setTextColor(
+//                    ContextCompat.getColor(this, R.color.colorGreen)
+//                )
+                binding.btnSendMail.isEnabled = true
             }
         }
 
         viewModel.existPhone.observe(this) {
             if (it) {
                 binding.editPhone.error = "이미 같은 번호가 존재합니다"
-                binding.textPhoneCheck.isEnabled = false
-                binding.textPhoneCheck.setTextColor(
-                    ContextCompat.getColor(this, R.color.colorGray8c8c)
-                )
-
+                binding.btnSendMessage.isEnabled = false
             } else {
-                binding.textPhoneCheck.setTextColor(
-                    ContextCompat.getColor(this, R.color.colorGreen)
-                )
-                binding.textPhoneCheck.isEnabled = true
+                binding.btnSendMessage.isEnabled = true
             }
         }
 
@@ -86,30 +74,37 @@ class SignupActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener {
             cancelSignup()
         }
-
         binding.editEmail.doAfterTextChanged {
-            Log.d(TAG, "doAfterTextChanged")
             existEmail()
         }
-
-        binding.textEmailCheck.setOnClickListener {
+        binding.btnSendMail.setOnClickListener {
             sendMail()
+            binding.btnEmailCheck.isEnabled = true
         }
-        binding.btnEmailCodeCheck.setOnClickListener {
+        binding.btnEmailCheck.setOnClickListener {
             emailCodeCheck(code)
         }
-        binding.editPhone.doAfterTextChanged {
-            Log.d(TAG, binding.editPhone.text.toString())
-            existPhone()
+        binding.editPassword.doOnTextChanged { _, _, _, _ ->
+            checkPassword()
         }
-//        binding.editPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        binding.editPasswordConfirm.doOnTextChanged { _, _, _, _ ->
+            checkPasswordConfirm()
+        }
+        binding.btnNextStep.setOnClickListener {
+            val email = binding.editEmail.text.toString()
+            val password = binding.editPassword.text.toString()
 
-        binding.textPhoneCheck.setOnClickListener {
-            sendMessage()
-            Log.d("here", phoneAuthNum)
-        }
-        binding.btnPhoneCodeCheck.setOnClickListener {
-            messageCodeCheck()
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        viewModel.email.value = email
+                        viewModel.password.value = password
+                        binding.layoutStep2.visibility = View.VISIBLE
+                        binding.layoutStep1.visibility = View.GONE
+                    } else {
+                        Log.d(TAG + "2", task.exception.toString())
+                    }
+                }
         }
         binding.genderRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             getGender()
@@ -118,13 +113,19 @@ class SignupActivity : AppCompatActivity() {
         binding.editNickname.doOnTextChanged { _, _, _, _ ->
             duplicateNicknameCheck()
         }
-        binding.editPassword.doOnTextChanged { _, _, _, _ ->
-            checkPassword()
+        binding.editPhone.doAfterTextChanged {
+            existPhone()
         }
-        binding.editPasswordConfirm.doOnTextChanged { _, _, _, _ ->
-            checkPasswordConfirm()
+//        binding.editPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        binding.btnSendMessage.setOnClickListener {
+            sendMessage()
         }
+        binding.btnPhoneCodeCheck.setOnClickListener {
+            messageCodeCheck()
+        }
+
         binding.btnSignup.setOnClickListener {
+            linkCredential(phoneCredential)
             saveUserDB()
         }
     }
@@ -132,85 +133,109 @@ class SignupActivity : AppCompatActivity() {
     private fun cancelSignup() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage("회원가입을 취소하시겠습니까?")
-            .setPositiveButton("네",
-                DialogInterface.OnClickListener { _, _ ->
-                    Log.d(TAG, "회원가입취소 - 네")
-                    finish()
-                })
-            .setNegativeButton("아니요",
-                DialogInterface.OnClickListener { _, _ ->
-                    Log.d(TAG, "회원가입취소 - 아니요")
-                })
+            .setPositiveButton("네") { _, _ ->
+                Log.d(TAG, "회원가입취소 - 네")
+                auth.currentUser?.delete()
+                finish()
+            }
+            .setNegativeButton("아니요") { _, _ ->
+                Log.d(TAG, "회원가입취소 - 아니요")
+            }
         builder.show()
     }
-
     private fun existEmail() {
         val email = binding.editEmail.text.toString()
         viewModel.email.value = email
 
-        Log.d(TAG, "viewModel.email.value : ${viewModel.email.value}")
+        if (isEmailValid(email) && email.length > 15) {
+            db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener {
+                    viewModel.existEmail.value = !it.isEmpty
+                }
+        } else binding.editEmail.error = "이메일형식이 맞지 않습니다"
+    }
+    private fun sendMail() {
+        val email = viewModel.email.value!!
+
+        val mailSender = GMailSender()
+        code = mailSender.code  //이메일 인증코드 저장
+        mailSender.sendEmail(email)
+        Toast.makeText(this, "이메일을 확인하여 인증을 완료해주세요", Toast.LENGTH_SHORT).show()
+
+    }
+    private fun emailCodeCheck(code: String) {
+        if (code == binding.editEmailCode.text.toString()) {
+            Toast.makeText(applicationContext, "인증되었습니다", Toast.LENGTH_SHORT).show()
+            binding.editPassword.isEnabled = true
+        } else Toast.makeText(applicationContext, "코드가 맞지 않습니다", Toast.LENGTH_SHORT).show()
+    }
+    private fun checkPassword() {
+        val password = binding.editPassword.text.toString()
+        viewModel.password.value = password
+
+        if (!isPasswordValid(password)) {
+            binding.editPassword.error = "숫자, 문자, 특수문자 중 2가지 포함(6~15자)"
+            binding.editPasswordConfirm.isEnabled = false
+        } else binding.editPasswordConfirm.isEnabled = true
+    }
+    private fun checkPasswordConfirm() {
+        val password = viewModel.password.value
+        val passwordConfirm = binding.editPasswordConfirm.text.toString()
+
+        if (password != passwordConfirm) {
+            binding.editPasswordConfirm.error = "비밀번호가 다릅니다"
+            binding.btnNextStep.isEnabled = false
+        } else binding.btnNextStep.isEnabled = true
+    }
+    private fun getGender() {
+        if (binding.genderM.isChecked) {
+            viewModel.gender.value = "Male"
+        } else if (binding.genderF.isChecked) {
+            viewModel.gender.value = "Female"
+        }
+    }
+    private fun duplicateNicknameCheck() {
+        val nickname = binding.editNickname.text.toString()
+        viewModel.nickname.value = nickname
 
         db.collection("users")
-            .whereEqualTo("email", email)
+            .whereEqualTo("nickname", nickname)
             .get()
             .addOnSuccessListener {
-                viewModel.existEmail.value = !it.isEmpty
-                Log.d(TAG, "viewModel.emailExist.value : ${viewModel.existEmail.value}")
+                if (!it.isEmpty) {
+                    binding.editNickname.error = "같은 아이디가 존재합니다"
+                    binding.editPhone.isEnabled = false
+                } else {
+                    binding.editPhone.isEnabled = true
+                }
             }
     }
-
     private fun existPhone() {
-        if(binding.editPhone.text.toString().length == 11) {
-//            val phone = phoneNumForm(binding.editPhone.text.toString())
+        if (binding.editPhone.text.toString().length == 11) {
             val phone = "+82" + binding.editPhone.text.toString().slice(1..10)
             viewModel.phone.value = phone
-
-            Log.d(TAG, "viewModel.phone.value : ${viewModel.phone.value}")
 
             db.collection("users")
                 .whereEqualTo("phone", phone)
                 .get()
                 .addOnSuccessListener {
                     viewModel.existPhone.value = !it.isEmpty
-                    Log.d(TAG, "viewModel.existPhone.value : ${viewModel.existPhone.value}")
                 }
         }
     }
 
-    private fun phoneNumForm(phone: String) =
-        "+82" + phone.replace("-", "").slice(1..10)
-
-    private fun sendMail() {
-        val email = viewModel.email.value!!
-
-        if (isEmailValid(email)) {
-            val mailSender = GMailSender()
-            code = mailSender.code  //이메일 인증코드 저장
-            mailSender.sendEmail(email)
-            Toast.makeText(this, "이메일을 확인하여 인증을 완료해주세요", Toast.LENGTH_SHORT).show()
-            binding.textEmailCheck.isEnabled = false
-            binding.btnEmailCodeCheck.isEnabled = true
-        } else {
-            binding.editEmail.error = "이메일을 정확히 입력해주세요"
-        }
-    }
-
-    private fun emailCodeCheck(code: String) {
-        if (code == binding.editEmailCode.text.toString()) {
-            binding.layoutStep1.visibility = View.GONE
-            binding.layoutStep2.visibility = View.VISIBLE
-        } else Toast.makeText(applicationContext, "코드가 맞지 않습니다", Toast.LENGTH_SHORT).show()
-    }
+//    private fun phoneNumForm(phone: String) =
+//        "+82" + phone.replace("-", "").slice(1..10)
 
     private fun sendMessage() {
-//        val phoneNum = "+82" + binding.editPhone.text.toString().slice(1..10)
-//        viewModel.phone.value = phoneNum
-
         val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 phoneAuthNum = credential.smsCode.toString()
+                phoneCredential = credential
+//                linkCredential(credential)
             }
-
             override fun onVerificationFailed(e: FirebaseException) {}
             override fun onCodeSent(
                 verificationId: String,
@@ -232,94 +257,41 @@ class SignupActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "문자를 확인하여 인증을 완료해주세요", Toast.LENGTH_SHORT).show()
         binding.btnPhoneCodeCheck.isEnabled = true
     }
-
+//    private fun signInWithPhoneAuthCredential(phoneAuthCredential: PhoneAuthCredential) {
+//        if (binding.editPhoneCode.text.toString() == phoneAuthNum) {
+//            auth.signInWithCredential(phoneAuthCredential)
+//                .addOnCompleteListener(this) { task ->
+//                    if (task.isSuccessful) {
+//                        binding.layoutStep2.visibility = View.GONE
+//                    }
+//                }
+//        } else {
+//            Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
+//        }
+//    }
     private fun messageCodeCheck() {
-        val phoneCredential =
-            PhoneAuthProvider.getCredential(storedVerificationId, phoneAuthNum)
-
-        viewModel.uid.value = storedVerificationId
-        signInWithPhoneAuthCredential(phoneCredential)
-    }
-
-    private fun signInWithPhoneAuthCredential(phoneAuthCredential: PhoneAuthCredential) {
-        binding.editPhoneCode.setText(phoneAuthNum)
-        if (binding.editPhoneCode.text.toString() == phoneAuthNum) {
-            auth.signInWithCredential(phoneAuthCredential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        binding.layoutStep2.visibility = View.GONE
-                        binding.layoutStep3.visibility = View.VISIBLE
-                    }
-                }
-        } else {
+        if(binding.editPhoneCode.text.toString() == phoneAuthNum){
+            binding.btnSignup.isEnabled = true
+        }else {
             Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
         }
     }
 
-/*    private fun signInWithPhoneAuthCredential(phoneAuthCredential: PhoneAuthCredential) {
-        if (binding.editPhoneCode.text.toString() == phoneAuthNum) {
-            auth.signInWithCredential(phoneAuthCredential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        binding.layoutStep2.visibility = View.GONE
-                        binding.layoutStep3.visibility = View.VISIBLE
-                    }
-                }
-        } else {
-            Toast.makeText(this, "인증코드가 틀렸습니다", Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
-    private fun duplicateNicknameCheck() {
-        val nickname = binding.editNickname.text.toString()
-        viewModel.nickname.value = nickname
-
-        db.collection("users")
-            .whereEqualTo("nickname", nickname)
-            .get()
-            .addOnSuccessListener {
-                if (!it.isEmpty) {
-                    binding.editNickname.error = "같은 아이디가 존재합니다"
-                    binding.editPassword.isEnabled = false
+    private fun linkCredential(credential: PhoneAuthCredential) {
+        auth.currentUser!!.linkWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    binding.layoutStep2.visibility = View.GONE
+                    val user = task.result?.user
+                    Log.d(TAG + "4", user.toString())
                 } else {
-                    binding.editPassword.isEnabled = true
+                    Log.d(TAG + "3", task.exception.toString())
                 }
             }
     }
-
-    private fun checkPassword() {
-        val password = binding.editPassword.text.toString()
-        viewModel.password.value = password
-
-        if (!isPasswordValid(password)) {
-            binding.editPassword.error = "숫자, 문자, 특수문자 중 2가지 포함(6~15자)"
-            binding.editPasswordConfirm.isEnabled = false
-        } else binding.editPasswordConfirm.isEnabled = true
-    }
-
-    private fun checkPasswordConfirm() {
-        val password = binding.editPassword.text.toString()
-        val passwordConfirm = binding.editPasswordConfirm.text.toString()
-
-        if (password != passwordConfirm) {
-            binding.editPasswordConfirm.error = "비밀번호가 다릅니다"
-            binding.btnSignup.isEnabled = false
-        } else binding.btnSignup.isEnabled = true
-    }
-
-    private fun getGender() {
-        if (binding.genderM.isChecked) {
-            viewModel.gender.value = "Male"
-        } else if (binding.genderF.isChecked) {
-            viewModel.gender.value = "Female"
-        }
-        Log.d(TAG, "genderText : ${viewModel.gender.value}")
-    }
-
     private fun saveUserDB() {
         if (checkValidValue()) {
-            val uid = auth.uid
-            viewModel.uid.value = uid
+            viewModel.uid.value = auth.uid
 
             val user =
                 User(
@@ -329,10 +301,12 @@ class SignupActivity : AppCompatActivity() {
                     viewModel.gender.value!!,
                     viewModel.nickname.value!!,
                     viewModel.password.value!!,
-                    viewModel.score.value!!
+                    viewModel.score.value!!,
+                    viewModel.imgUrl.value!!,
+                    viewModel.countAddress.value!!
                 )
 
-            db.collection("users").document(user.uid!!).set(user)
+            db.collection("users").document(user.uid).set(user)
                 .addOnSuccessListener {
                     Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, LoginActivity::class.java))
@@ -349,7 +323,6 @@ class SignupActivity : AppCompatActivity() {
 
     // TODO db 삽입 전 각 value 별 유효성 검사
     private fun checkValidValue(): Boolean {
-
         return true
     }
 
@@ -365,6 +338,6 @@ class SignupActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val TAG = "SignupActivity"
+        private const val TAG = "SignupActivity/"
     }
 }

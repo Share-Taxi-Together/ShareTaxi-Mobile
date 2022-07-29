@@ -13,6 +13,6 @@ data class User(
     @ColumnInfo var nickname: String,
     @ColumnInfo var password: String,
     @ColumnInfo var score: String,        //점수(노쇼 방지)
-    @ColumnInfo var imgUrl: String? = null,         //프로필 이미지url
-    @ColumnInfo var countAddress: String? = null    //계좌번호
+    @ColumnInfo var imgUrl: String,         //프로필 이미지url
+    @ColumnInfo var countAddress: String    //계좌번호
     )

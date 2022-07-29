@@ -14,4 +14,17 @@
         <item>토스뱅크</item>
         <item>케이뱅크</item>
     </string-array>
+
+    <string-array name="num">
+        <item>선택</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>선택</item>
+        <item>동성만</item>
+        <item>무관</item>
+    </string-array>
 </resources>
