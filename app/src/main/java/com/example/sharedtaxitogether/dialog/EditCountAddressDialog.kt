@@ -8,13 +8,9 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import com.example.sharedtaxitogether.R
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class EditCountAddressDialog(context: Context) {
     private val dialog = Dialog(context)
-    private val db: FirebaseFirestore = Firebase.firestore
 
     fun myDialog() {
         dialog.setContentView(R.layout.dialog_edit_countaddress)
