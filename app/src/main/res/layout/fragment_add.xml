@@ -60,11 +60,6 @@
             android:textSize="15sp"
             tools:text="시흥시 정왕동,,," />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,20 +90,43 @@
             android:textSize="15sp"
             tools:text="시흥시 정왕동,,," />
 
-        <TextView
-            android:id="@+id/addPlace"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:padding="5dp"
-            android:text="혹시 원하는 장소가 없나요?"
-            android:textColor="@color/purple_500"
-            android:textSize="12sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/showRoute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="5dp"
+                android:text="경로 확인"
+                android:textColor="@color/purple_500"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/addPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="5dp"
+                android:text="혹시 원하는 장소가 없나요?"
+                android:textColor="@color/purple_500"
+                android:textSize="12sp" />
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
+
 
         <LinearLayout
             android:layout_width="match_parent"

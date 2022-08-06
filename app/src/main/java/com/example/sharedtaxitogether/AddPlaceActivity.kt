@@ -3,13 +3,9 @@ package com.example.sharedtaxitogether
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.sharedtaxitogether.databinding.ActivityAddPlaceBinding
-import com.skt.Tmap.TMapData
-import com.skt.Tmap.TMapGpsManager
-import com.skt.Tmap.TMapPoint
-import com.skt.Tmap.TMapView
+import com.skt.Tmap.*
 
 class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCallback {
     private lateinit var binding: ActivityAddPlaceBinding
@@ -18,7 +14,6 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
     lateinit var tMapPoint: TMapPoint
     lateinit var tMapData: TMapData
     lateinit var tMapGPS: TMapGpsManager
-    lateinit var linearLayoutMap: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +25,9 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
 
         tMapView.setIconVisibility(true)
         tMapView.mapType = TMapView.MAPTYPE_STANDARD
-        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN)
+//        //나침반모드
+//        tMapView.setCompassMode(true)
+//        tMapView.setSightVisible(true)
 
         binding.linearLayoutMap.addView(tMapView)
 
@@ -40,7 +37,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             )
-            requestPermissions(permissions, 100);
+            requestPermissions(permissions, 100)
         }
 
         tMapGPS = TMapGpsManager(this)
@@ -51,15 +48,24 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
 
         tMapGPS.OpenGps()
 
-        //취소버튼 누르면 현재 위치의 주소, 위도, 경도값 가져오기
+        //추가버튼 누르면 현재 위치의 주소, 위도, 경도값 가져오기
+        bind()
+    }
+
+    private fun bind() {
         binding.cancelBtn.setOnClickListener {
-            tMapPoint = tMapView.locationPoint
+            finish()
+        }
+
+        binding.addBtn.setOnClickListener {
+            tMapPoint = tMapView.getTMapPointFromScreenPoint(100F, 100F)
             val latitude = tMapPoint.latitude
             val longitude = tMapPoint.longitude
 
             binding.latitudeText.text = latitude.toString()
             binding.longitudeText.text = longitude.toString()
 
+            //위도경도로 주소반환
             tMapData = TMapData()
             Thread {
                 val address = tMapData.convertGpsToAddress(latitude, longitude)
