@@ -74,7 +74,6 @@ class AddListFragment : Fragment() {
 
         tMapView.zoomLevel = 14
         tMapView.mapType = TMapView.MAPTYPE_STANDARD
-        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN)
         tMapView.setCenterPoint(126.733529, 37.340191)
 
         //마커 생성
@@ -106,7 +105,6 @@ class AddListFragment : Fragment() {
                         viewModel.destLatitude.value!!.toDouble(),
                         viewModel.destLongitude.value!!.toDouble()
                     )
-
                     try {
                         val tMapPolyLine = TMapData().findPathData(tMapPointStart, tMapPointEnd)
                         tMapPolyLine.lineColor = Color.BLACK
@@ -173,8 +171,8 @@ class AddListFragment : Fragment() {
                     val item = Place(
                         document["id"] as String,
                         document["address"] as String,
-                        document["longitude"] as String,
-                        document["latitude"] as String
+                        document["latitude"] as String,
+                        document["longitude"] as String
                     )
                     nameList.add(document["id"] as String)
                     placeList.add(item)
@@ -233,8 +231,8 @@ class AddListFragment : Fragment() {
                     id: Long
                 ) {
                     dest = binding.spinnerDest.getItemAtPosition(position).toString()
-                    viewModel.destLongitude.value = placeList[position].longitude
                     viewModel.destLatitude.value = placeList[position].latitude
+                    viewModel.destLongitude.value = placeList[position].longitude
                     binding.textDest.text = placeList[position].address
                 }
             }
