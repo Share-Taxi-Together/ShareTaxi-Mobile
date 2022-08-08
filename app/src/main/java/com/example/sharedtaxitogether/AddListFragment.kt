@@ -174,17 +174,17 @@ class AddListFragment : Fragment() {
     private fun getPlace() {
         db.collection("places")
             .get()
-            .addOnSuccessListener { result ->
+            .addOnSuccessListener {
                 nameList.clear()
-                for (document in result) {
-                    val item = Place(
+                for (document in it) {
+                    val place = Place(
                         document["id"] as String,
                         document["address"] as String,
                         document["latitude"] as String,
                         document["longitude"] as String
                     )
                     nameList.add(document["id"] as String)
-                    placeList.add(item)
+                    placeList.add(place)
                 }
                 placeList.add(Place("선택", "", "", ""))
                 nameList.add("--선택--")

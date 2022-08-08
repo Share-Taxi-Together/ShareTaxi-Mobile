@@ -1,11 +1,14 @@
 package com.example.sharedtaxitogether
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.sharedtaxitogether.databinding.ActivityAddPlaceBinding
 import com.example.sharedtaxitogether.model.Place
 import com.example.sharedtaxitogether.viewModel.AddPlaceViewModel
@@ -29,6 +32,8 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         binding = ActivityAddPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        db = FirebaseFirestore.getInstance()
+
         tMapView = TMapView(this)
         tMapView.setSKTMapApiKey(api_key)
 
@@ -36,24 +41,30 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
 
         binding.linearLayoutMap.addView(tMapView)
 
-        // Request For GPS permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            || ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             val permissions = arrayOf(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             )
-            requestPermissions(permissions, 100)
+            ActivityCompat.requestPermissions(this, permissions, 100)
+        } else {
+            tMapGPS = TMapGpsManager(this)
+
+            tMapGPS.minTime = 1000
+            tMapGPS.minDistance = 10F
+            tMapGPS.provider = TMapGpsManager.NETWORK_PROVIDER
+
+            tMapGPS.OpenGps()
         }
 
-        tMapGPS = TMapGpsManager(this)
-
-        tMapGPS.minTime = 1000
-        tMapGPS.minDistance = 10F
-        tMapGPS.provider = TMapGpsManager.NETWORK_PROVIDER
-
-        tMapGPS.OpenGps()
-
-        //추가버튼 누르면 현재 위치의 주소, 위도, 경도값 가져오기
         bind()
     }
 
@@ -76,10 +87,12 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
             //위도경도로 주소반환
             tMapData = TMapData()
             Thread {
-                viewModel.address.postValue(tMapData.convertGpsToAddress(
-                    viewModel.latitude.value!!,
-                    viewModel.longitude.value!!
-                ))
+                viewModel.address.postValue(
+                    tMapData.convertGpsToAddress(
+                        viewModel.latitude.value!!,
+                        viewModel.longitude.value!!
+                    )
+                )
                 binding.addressText.text = viewModel.address.value
             }.start()
         }
@@ -98,19 +111,15 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
                     viewModel.longitude.value.toString()
                 )
 
-            Log.d("here add", place.id)
-            Log.d("here add", place.address)
-            Log.d("here add", place.latitude)
-            Log.d("here add", place.longitude)
-
-//            db.collection("places").document(place.id).set(place)
-//                .addOnSuccessListener {
-//                    Toast.makeText(this, "장소가 추가되었습니다", Toast.LENGTH_SHORT).show()
-//                }
-//                .addOnFailureListener { e ->
-//                    Toast.makeText(this, "장소추가에 실패했습니다", Toast.LENGTH_SHORT).show()
-//                    Log.w("here", "Error adding document", e)
-//                }
+            db.collection("places").document(place.id).set(place)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "장소가 추가되었습니다", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "장소추가에 실패했습니다", Toast.LENGTH_SHORT).show()
+                    Log.w("here", "Error adding document", e)
+                }
         }
     }
 
