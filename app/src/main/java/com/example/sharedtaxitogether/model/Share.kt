@@ -7,18 +7,18 @@ class Share(
 //    var startPlace: HashMap<String, Place> = HashMap(),
 //    var destPlace: HashMap<String, Place> = HashMap(),
 
-    var creatorUid: String,
-    var creatorImgUrl: String,
-    var creatorNickname: String,
-    var creatorGender: String,
+    var creatorUid: String = "",
+    var creatorImgUrl: String = "",
+    var creatorNickname: String = "",
+    var creatorGender: String = "",
 
-    var memberCount: Int,
+    var memberCount: Int = 1,
 
-    var start: String,
-    var dest: String,
-    var memberNum: String,
-    var memberGender: String,
-    var departTime: String,
+    var start: String = "",
+    var dest: String = "",
+    var memberNum: String = "",
+    var memberGender: String = "",
+    var departTime: String = "",
 
     val participants: HashMap<String, Participant> = HashMap()) {
     class Participant(
