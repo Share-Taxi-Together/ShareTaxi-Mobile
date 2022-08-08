@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -14,15 +13,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.*
 import com.example.sharedtaxitogether.databinding.FragmentAddBinding
 import com.example.sharedtaxitogether.model.Place
+import com.example.sharedtaxitogether.model.Share
+import com.example.sharedtaxitogether.viewModel.LoginViewModel
 import com.example.sharedtaxitogether.viewModel.addInfoViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.skt.Tmap.TMapData
-import com.skt.Tmap.TMapMarkerItem
 import com.skt.Tmap.TMapPoint
 import com.skt.Tmap.TMapView
 import java.text.SimpleDateFormat
@@ -30,6 +30,8 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class AddListFragment : Fragment() {
+    private val listFragment = ListFragment()
+
     private val api_key: String = BuildConfig.TMAP_API_KEY
     lateinit var tMapView: TMapView
 
@@ -37,12 +39,10 @@ class AddListFragment : Fragment() {
     private lateinit var binding: FragmentAddBinding
     private val db = FirebaseFirestore.getInstance()
     private val viewModel: addInfoViewModel by viewModels()
+    private val userViewModel: LoginViewModel by activityViewModels()
 
     private val placeList = arrayListOf<Place>()
     private val nameList = arrayListOf<String>()
-
-    lateinit var start: String
-    lateinit var dest: String
 
     // TODO LiveData 합승정보 추가 및 observer
     // todo 출발, 도착 장소 다른지 체크
@@ -57,7 +57,6 @@ class AddListFragment : Fragment() {
 
         //합승인원구할건지 여부 확인
         checkAdd()
-
         binding = FragmentAddBinding.inflate(layoutInflater)
     }
 
@@ -65,7 +64,7 @@ class AddListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.startLatitute.observe(this){
+        viewModel.startLatitude.observe(this) {
 
         }
 
@@ -76,29 +75,37 @@ class AddListFragment : Fragment() {
         tMapView.mapType = TMapView.MAPTYPE_STANDARD
         tMapView.setCenterPoint(126.733529, 37.340191)
 
-        //마커 생성
-        val markerItem = TMapMarkerItem()
-        val tMapPoint = TMapPoint(37.340191, 126.733529)
-        val bitmap = BitmapFactory.decodeResource(
-            resources,
-            com.example.sharedtaxitogether.R.drawable.placeholder
-        )
-
-        markerItem.icon = bitmap
-        markerItem.setPosition(0.5f, 1.0f)
-        markerItem.tMapPoint = tMapPoint
-        markerItem.name = "한공대"
-        tMapView.addMarkerItem("marker", markerItem)
-
         binding.layoutTmap.addView(tMapView)
 
+        binding.addListBtn.setOnClickListener {
+            //todo 모든 항목 선택완료했는지 확인하기
+            val share = Share(
+                userViewModel.uid.value!!,
+                userViewModel.imgUrl.value!!,
+                userViewModel.nickname.value!!,
+                userViewModel.gender.value!!,
+                1,
+                viewModel.start.value!!,
+                viewModel.dest.value!!,
+                viewModel.memberNum.value!!,
+                viewModel.memberGender.value!!,
+                viewModel.time.value!!
+            )
+            db.collection("shares").document()
+                .set(share)
+                .addOnSuccessListener {
+                    Log.d("here", "success save")
+                    Toast.makeText(mainActivity, "목록에 추가되었습니다", Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).replaceFragment(listFragment)
+                }
+        }
 
         binding.showRoute.setOnClickListener {
-            if (start.isNotBlank() && dest.isNotBlank()) {
+            if (viewModel.start.value!!.isNotBlank() && viewModel.dest.value!!.isNotBlank()) {
                 //경로 표시
                 thread(start = true) {
                     val tMapPointStart = TMapPoint(
-                        viewModel.startLatitute.value!!.toDouble(),
+                        viewModel.startLatitude.value!!.toDouble(),
                         viewModel.startLongitude.value!!.toDouble()
                     )
                     val tMapPointEnd = TMapPoint(
@@ -107,13 +114,16 @@ class AddListFragment : Fragment() {
                     )
                     try {
                         val tMapPolyLine = TMapData().findPathData(tMapPointStart, tMapPointEnd)
-                        tMapPolyLine.lineColor = Color.BLACK
-                        tMapPolyLine.lineWidth = 2.0f
-                        tMapView.addTMapPolyLine("line", tMapPolyLine)
+                        tMapPolyLine.lineColor = Color.RED
+                        tMapPolyLine.lineWidth = 5.0f
+                        tMapView.addTMapPath(tMapPolyLine)
+//                        tMapView.addTMapPolyLine("line", tMapPolyLine)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }
+            } else {
+                Toast.makeText(mainActivity, "출발지 또는 도착지를 선택하지 않았습니다", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -136,8 +146,8 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                // TODO num 값 활용하기
-                var num = binding.spinnerNum.getItemAtPosition(position).toString()
+                viewModel.memberNum.value =
+                    binding.spinnerNum.getItemAtPosition(position).toString()
             }
         }
 
@@ -149,9 +159,8 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                // TODO gender 값 활용하기
-                val gender = binding.spinnerGender.getItemAtPosition(position).toString()
-                Log.d("here gender", gender)
+                viewModel.memberGender.value =
+                    binding.spinnerGender.getItemAtPosition(position).toString()
             }
         }
 
@@ -212,12 +221,11 @@ class AddListFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    start = binding.spinnerStart.getItemAtPosition(position).toString()
+                    viewModel.start.value =
+                        binding.spinnerStart.getItemAtPosition(position).toString()
                     viewModel.startLongitude.value = placeList[position].longitude
-                    viewModel.startLatitute.value = placeList[position].latitude
+                    viewModel.startLatitude.value = placeList[position].latitude
                     binding.textStart.text = placeList[position].address
-
-                    Log.d("here", viewModel.startLongitude.value!!)
                 }
             }
 
@@ -230,7 +238,8 @@ class AddListFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    dest = binding.spinnerDest.getItemAtPosition(position).toString()
+                    viewModel.dest.value =
+                        binding.spinnerDest.getItemAtPosition(position).toString()
                     viewModel.destLatitude.value = placeList[position].latitude
                     viewModel.destLongitude.value = placeList[position].longitude
                     binding.textDest.text = placeList[position].address
@@ -247,6 +256,7 @@ class AddListFragment : Fragment() {
             cal.set(Calendar.MINUTE, minute)
 
             binding.timeText.text = SimpleDateFormat("HH:mm").format(cal.time)
+            viewModel.time.value = SimpleDateFormat("HH:mm").format(cal.time)
         }
 
         TimePickerDialog(

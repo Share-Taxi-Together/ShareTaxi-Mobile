@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 
 class addInfoViewModel: ViewModel() {
     var startLongitude = MutableLiveData<String>()
-    var startLatitute = MutableLiveData<String>()
+    var startLatitude = MutableLiveData<String>()
     var destLongitude = MutableLiveData<String>()
     var destLatitude = MutableLiveData<String>()
 
-//    var member = MutableLiveData<String>()
-//    var gender = MutableLiveData<String>()
-//    var time = MutableLiveData<String>()
-
-
+    var start = MutableLiveData<String>()
+    var dest = MutableLiveData<String>()
+    var memberNum = MutableLiveData<String>()
+    var memberGender = MutableLiveData<String>()
+    var time = MutableLiveData<String>()
 }

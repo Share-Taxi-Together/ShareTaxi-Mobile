@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.example.sharedtaxitogether.databinding.ActivityMainBinding
 import com.example.sharedtaxitogether.viewModel.LoginViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -55,6 +57,13 @@ class MainActivity : AppCompatActivity() {
             mBackWait = System.currentTimeMillis()
             Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         } else finish()    //액티비티 종료
+    }
+
+    //fragment간 이동
+    fun replaceFragment(fragment: Fragment){
+        val fragmentManager: FragmentManager = supportFragmentManager
+        val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout, fragment).commit()
     }
 
     private fun getUserInfo() {
