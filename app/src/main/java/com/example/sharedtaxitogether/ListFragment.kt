@@ -6,18 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.sharedtaxitogether.adapter.ListAdapter
+import com.example.sharedtaxitogether.adapter.ShareListAdapter
 import com.example.sharedtaxitogether.databinding.FragmentListBinding
-import com.example.sharedtaxitogether.model.Share
-import com.google.firebase.firestore.FirebaseFirestore
 
 class ListFragment : Fragment() {
     lateinit var mainActivity: MainActivity
     private lateinit var binding: FragmentListBinding
-    private val db = FirebaseFirestore.getInstance()
 
-    lateinit var listAdapter: ListAdapter
-    val data = mutableListOf<Share>()
+    lateinit var listAdapter: ShareListAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,7 +32,7 @@ class ListFragment : Fragment() {
     }
 
     private fun initListRecyclerView() {
-        listAdapter = ListAdapter(mainActivity)
+        listAdapter = ShareListAdapter(mainActivity)
 
 //        listAdapter.currentList.add(
 //            Share(
@@ -50,7 +46,6 @@ class ListFragment : Fragment() {
 //                "정왕역", "유호엔시티", "2", "무관", "23:00"
 //            )
 //        )
-
 //        db.collection("shares").get()
 //            .addOnSuccessListener {
 //                for(document in it){
@@ -60,6 +55,5 @@ class ListFragment : Fragment() {
 //                listAdapter.notifyDataSetChanged()
 //            }
         binding.recyclerList.adapter = listAdapter
-
     }
 }
