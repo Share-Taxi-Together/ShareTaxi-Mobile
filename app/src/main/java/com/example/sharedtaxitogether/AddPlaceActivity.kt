@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import com.example.sharedtaxitogether.databinding.ActivityAddPlaceBinding
 import com.example.sharedtaxitogether.dialog.LoadingDialog
 import com.example.sharedtaxitogether.model.Place
@@ -25,6 +26,8 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
     private lateinit var tMapData: TMapData
     lateinit var tMapGPS: TMapGpsManager
 
+    var changeLocation = MutableLiveData<Boolean>()
+
     private val viewModel: AddPlaceViewModel by viewModels()
     private lateinit var db: FirebaseFirestore
 
@@ -32,6 +35,13 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         super.onCreate(savedInstanceState)
         binding = ActivityAddPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        changeLocation.value = false
+
+        changeLocation.observe(this){
+            if(it){
+                binding.linearLayoutMap.addView(tMapView)
+            }
+        }
 
         val dialog = LoadingDialog(this)
         dialog.show()
@@ -43,7 +53,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
 
         tMapView.mapType = TMapView.MAPTYPE_STANDARD
 
-        binding.linearLayoutMap.addView(tMapView)
+
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -129,6 +139,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
     }
 
     override fun onLocationChange(location: Location) {
+        changeLocation.value = true
         tMapView.setLocationPoint(location.longitude, location.latitude)
         tMapView.setCenterPoint(location.longitude, location.latitude)
 
