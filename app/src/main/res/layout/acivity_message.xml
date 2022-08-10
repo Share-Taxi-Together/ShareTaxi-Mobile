@@ -6,34 +6,41 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
-    <LinearLayout
-        android:id="@+id/messageActivity_roomName"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/messageActivity_start"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@id/messageActivity_dest"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="출발지" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="출발지" />
+    <TextView
+        android:id="@+id/messageActivity_dest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@id/messageActivity_departTime"
+        app:layout_constraintStart_toEndOf="@id/messageActivity_start"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="도착지" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="도착지" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="출발시간" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/messageActivity_departTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/messageActivity_dest"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="출발시간" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageActivity_profiles"
@@ -45,7 +52,7 @@
         app:layout_constraintBottom_toTopOf="@id/messageActivity_recyclerview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/messageActivity_roomName"
+        app:layout_constraintTop_toBottomOf="@id/messageActivity_start"
         tools:listitem="@layout/item_recycler_profiles" />
 
     <androidx.recyclerview.widget.RecyclerView
