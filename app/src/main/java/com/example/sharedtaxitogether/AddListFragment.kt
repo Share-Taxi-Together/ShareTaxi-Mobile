@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.*
 import com.example.sharedtaxitogether.databinding.FragmentAddBinding
+import com.example.sharedtaxitogether.dialog.LoadingDialog
 import com.example.sharedtaxitogether.model.Place
 import com.example.sharedtaxitogether.model.Share
 import com.example.sharedtaxitogether.viewModel.LoginViewModel
@@ -60,6 +61,7 @@ class AddListFragment : Fragment() {
         binding = FragmentAddBinding.inflate(layoutInflater)
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -133,7 +135,10 @@ class AddListFragment : Fragment() {
             // 이름작성, 주소는 위에서 받아오고
             // 추가하기 버튼 누르면 db에 추가
 
+
+
             startActivity(Intent(mainActivity, AddPlaceActivity::class.java))
+            //dialog.dismiss()
             //count는 넣을지말지 고민중,,,
             // 넣는다면 선택될때마다 세서 장소목록 보여줄 때 count 많은 순으로 정렬하기
         }

@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import com.example.sharedtaxitogether.databinding.ActivityAddPlaceBinding
+import com.example.sharedtaxitogether.dialog.LoadingDialog
 import com.example.sharedtaxitogether.model.Place
 import com.example.sharedtaxitogether.viewModel.AddPlaceViewModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +26,8 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
     private lateinit var tMapData: TMapData
     lateinit var tMapGPS: TMapGpsManager
 
+    var changeLocation = MutableLiveData<Boolean>()
+
     private val viewModel: AddPlaceViewModel by viewModels()
     private lateinit var db: FirebaseFirestore
 
@@ -31,6 +35,17 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         super.onCreate(savedInstanceState)
         binding = ActivityAddPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        changeLocation.value = false
+
+        val dialog = LoadingDialog(this)
+        dialog.show()
+
+        changeLocation.observe(this){
+            if(it){
+                binding.linearLayoutMap.addView(tMapView)
+                dialog.dismiss()
+            }
+        }
 
         db = FirebaseFirestore.getInstance()
 
@@ -39,7 +54,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
 
         tMapView.mapType = TMapView.MAPTYPE_STANDARD
 
-        binding.linearLayoutMap.addView(tMapView)
+
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -66,6 +81,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         }
 
         bind()
+
     }
 
     private fun bind() {
@@ -124,13 +140,14 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
     }
 
     override fun onLocationChange(location: Location) {
+        changeLocation.value = true
         tMapView.setLocationPoint(location.longitude, location.latitude)
         tMapView.setCenterPoint(location.longitude, location.latitude)
 
         //화면 좌표 가져오기
-        val location = IntArray(2) { 0 }
-        binding.marker.getLocationOnScreen(location)
-        viewModel.pointX.value = location[0] //x좌표
-        viewModel.pointY.value = location[1] //y좌표
+        val screenLocation = IntArray(2) { 0 }
+        binding.marker.getLocationOnScreen(screenLocation)
+        viewModel.pointX.value = screenLocation[0] //x좌표
+        viewModel.pointY.value = screenLocation[1] //y좌표
     }
 }
