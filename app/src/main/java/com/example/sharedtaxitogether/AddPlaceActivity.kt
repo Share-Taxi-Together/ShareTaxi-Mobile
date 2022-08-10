@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.sharedtaxitogether.databinding.ActivityAddPlaceBinding
+import com.example.sharedtaxitogether.dialog.LoadingDialog
 import com.example.sharedtaxitogether.model.Place
 import com.example.sharedtaxitogether.viewModel.AddPlaceViewModel
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +32,9 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         super.onCreate(savedInstanceState)
         binding = ActivityAddPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val dialog = LoadingDialog(this)
+        dialog.show()
 
         db = FirebaseFirestore.getInstance()
 
@@ -66,6 +70,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         }
 
         bind()
+        dialog.dismiss()
     }
 
     private fun bind() {
