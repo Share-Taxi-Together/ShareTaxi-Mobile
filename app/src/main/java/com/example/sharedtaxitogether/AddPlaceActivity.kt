@@ -37,14 +37,15 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         setContentView(binding.root)
         changeLocation.value = false
 
+        val dialog = LoadingDialog(this)
+        dialog.show()
+
         changeLocation.observe(this){
             if(it){
                 binding.linearLayoutMap.addView(tMapView)
+                dialog.dismiss()
             }
         }
-
-        val dialog = LoadingDialog(this)
-        dialog.show()
 
         db = FirebaseFirestore.getInstance()
 
@@ -80,7 +81,7 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         }
 
         bind()
-        dialog.dismiss()
+
     }
 
     private fun bind() {
@@ -144,9 +145,9 @@ class AddPlaceActivity : AppCompatActivity(), TMapGpsManager.onLocationChangedCa
         tMapView.setCenterPoint(location.longitude, location.latitude)
 
         //화면 좌표 가져오기
-        val location = IntArray(2) { 0 }
-        binding.marker.getLocationOnScreen(location)
-        viewModel.pointX.value = location[0] //x좌표
-        viewModel.pointY.value = location[1] //y좌표
+        val screenLocation = IntArray(2) { 0 }
+        binding.marker.getLocationOnScreen(screenLocation)
+        viewModel.pointX.value = screenLocation[0] //x좌표
+        viewModel.pointY.value = screenLocation[1] //y좌표
     }
 }
