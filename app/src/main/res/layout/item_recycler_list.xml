@@ -10,41 +10,41 @@
     android:paddingHorizontal="20dp"
     android:paddingVertical="10dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/list_creatorProfileImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:padding="5dp"
-        app:layout_constraintBottom_toTopOf="@id/layoutCreator"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/default_profile" />
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/list_creatorProfileImage"-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_height="100dp"-->
+<!--        android:padding="5dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/layoutCreator"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:src="@drawable/default_profile" />-->
 
-    <LinearLayout
-        android:id="@+id/layoutCreator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/list_creatorProfileImage"
-        app:layout_constraintStart_toStartOf="@id/list_creatorProfileImage"
-        app:layout_constraintTop_toBottomOf="@id/list_creatorProfileImage">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layoutCreator"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/list_creatorProfileImage"-->
+<!--        app:layout_constraintStart_toStartOf="@id/list_creatorProfileImage"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/list_creatorProfileImage">-->
 
-        <TextView
-            android:id="@+id/list_creatorNickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/list_creatorProfileImage"
-            tools:text="택시타자" />
+<!--        <TextView-->
+<!--            android:id="@+id/list_creatorNickname"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/list_creatorProfileImage"-->
+<!--            tools:text="택시타자" />-->
 
-        <ImageView
-            android:id="@+id/list_creatorGender"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginStart="3dp"
-            tools:src="@drawable/male" />
-    </LinearLayout>
+<!--        <ImageView-->
+<!--            android:id="@+id/list_creatorGender"-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_marginStart="3dp"-->
+<!--            tools:src="@drawable/male" />-->
+<!--    </LinearLayout>-->
 
 
     <TextView
@@ -53,10 +53,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="출발 : "
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toTopOf="@id/text1"
         app:layout_constraintEnd_toStartOf="@id/list_start"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/list_creatorProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -65,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="@id/text"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text"
         app:layout_constraintTop_toTopOf="@id/text"
         tools:text="정왕역" />
@@ -75,10 +75,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="도착 : "
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toTopOf="@id/text2"
         app:layout_constraintEnd_toStartOf="@id/list_dest"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/list_creatorProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text" />
 
     <TextView
@@ -87,7 +88,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="@id/text1"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text1"
         app:layout_constraintTop_toTopOf="@id/text1"
         tools:text="유호엔시티" />
@@ -98,10 +98,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="성별 : "
+        android:layout_marginStart="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/list_gender"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/list_creatorProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text1" />
 
     <TextView
@@ -110,7 +111,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="@id/text2"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/text2"
         app:layout_constraintTop_toTopOf="@id/text2"
         tools:text="무관" />

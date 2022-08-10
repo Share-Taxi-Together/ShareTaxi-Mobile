@@ -46,25 +46,25 @@ class ShareListAdapter(private val context: Context) :
     inner class ListItemViewHolder(private val binding: ItemRecyclerListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Share) {
-            binding.listCreatorNickname.text = item.creatorNickname
+//            binding.listCreatorNickname.text = item.creatorNickname
             binding.listGender.text = item.memberGender
             binding.listStart.text = item.start
             binding.listDest.text = item.dest
             binding.listMember.text = "${item.memberCount} / ${item.memberNum}"
             binding.listTime.text = item.departTime
 
-            when(item.creatorGender){
-                "Male" -> binding.listCreatorGender.setImageResource(R.drawable.male)
-                "Female" -> binding.listCreatorGender.setImageResource(R.drawable.female)
-            }
+//            when(item.creatorGender){
+//                "Male" -> binding.listCreatorGender.setImageResource(R.drawable.male)
+//                "Female" -> binding.listCreatorGender.setImageResource(R.drawable.female)
+//            }
 
-            if(item.creatorImgUrl.isBlank()){
-                binding.listCreatorProfileImage.setImageResource(R.drawable.default_profile)
-            }else{
-                Glide.with(binding.listCreatorProfileImage.context)
-                    .load(item.creatorImgUrl)
-                    .into(binding.listCreatorProfileImage)
-            }
+//            if(item.creatorImgUrl.isBlank()){
+//                binding.listCreatorProfileImage.setImageResource(R.drawable.default_profile)
+//            }else{
+//                Glide.with(binding.listCreatorProfileImage.context)
+//                    .load(item.creatorImgUrl)
+//                    .into(binding.listCreatorProfileImage)
+//            }
 
             itemView.setOnClickListener{
                 Intent(context, MessageActivity::class.java).apply {

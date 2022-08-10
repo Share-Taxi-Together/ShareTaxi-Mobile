@@ -16,7 +16,6 @@ class MessageActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         datas = intent.getSerializableExtra("data") as Share
-        Log.d("here MessageActivity", datas.creatorImgUrl)
 
         // datas 에는 생성자 정보, 합승 정보, 참가자 정보
         binding.messageActivityStart.text = "출발 - ${datas.start}"

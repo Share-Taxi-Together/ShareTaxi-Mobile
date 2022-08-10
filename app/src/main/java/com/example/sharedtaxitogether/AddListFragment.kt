@@ -79,25 +79,44 @@ class AddListFragment : Fragment() {
 
         binding.addListBtn.setOnClickListener {
             //todo 모든 항목 선택완료했는지 확인하기
+//            val creator = Share.Participant()
+//            creator.uid = userViewModel.uid.value!!
+//            creator.imgUrl = userViewModel.imgUrl.value!!
+//            creator.nickname = userViewModel.nickname.value!!
+//            creator.gender = userViewModel.gender.value!!
+
+            val time = System.currentTimeMillis()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val currentTime = dateFormat.format(time).toString()
+
             val share = Share(
-                userViewModel.uid.value!!,
-                userViewModel.imgUrl.value!!,
-                userViewModel.nickname.value!!,
-                userViewModel.gender.value!!,
+                currentTime,
                 1,
                 viewModel.start.value!!,
                 viewModel.dest.value!!,
                 viewModel.memberNum.value!!,
                 viewModel.memberGender.value!!,
-                viewModel.time.value!!
+                viewModel.time.value!!,
+                hashMapOf(
+                    "1" to Share.Participant(
+                        userViewModel.uid.value!!,
+                        userViewModel.imgUrl.value!!,
+                        userViewModel.nickname.value!!,
+                        userViewModel.gender.value!!
+                    )
+                )
             )
-            db.collection("shares").document()
+            db.collection("shares").document(share.shareUid)
                 .set(share)
                 .addOnSuccessListener {
                     Log.d("here", "success save")
                     Toast.makeText(mainActivity, "목록에 추가되었습니다", Toast.LENGTH_SHORT).show()
                     (activity as MainActivity).replaceFragment(listFragment)
                 }
+//
+//            db.collection("shares").document(share.shareUid)
+//                .collection("participants").document(creator.uid!!).set(creator)
+//
         }
 
         binding.showRoute.setOnClickListener {

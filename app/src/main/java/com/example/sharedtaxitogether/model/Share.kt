@@ -9,11 +9,12 @@ class Share(
 //    var startPlace: HashMap<String, Place> = HashMap(),
 //    var destPlace: HashMap<String, Place> = HashMap(),
 
-    var creatorUid: String = "",
-    var creatorImgUrl: String = "",
-    var creatorNickname: String = "",
-    var creatorGender: String = "",
+//    var creatorUid: String = "",
+//    var creatorImgUrl: String = "",
+//    var creatorNickname: String = "",
+//    var creatorGender: String = "",
 
+    var shareUid: String = "",  //db에 추가한 시간
     var memberCount: Int = 1,
 
     var start: String = "",
@@ -22,11 +23,11 @@ class Share(
     var memberGender: String = "",
     var departTime: String = "",
 
-    val participants: HashMap<String, Participant> = HashMap()): Serializable {
+    var participants: HashMap<String, Participant> = HashMap()): Serializable {
     class Participant(
-        val uid: String? = null,
-        val imgUrl: String? = null,
-        val nickname: String? = null,
-        val gender: String? = null
+        var uid: String? = null,
+        var imgUrl: String? = null,
+        var nickname: String? = null,
+        var gender: String? = null
     ):Serializable
 }
