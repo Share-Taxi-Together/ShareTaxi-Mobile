@@ -104,6 +104,12 @@ class AddListFragment : Fragment() {
                         userViewModel.nickname.value!!,
                         userViewModel.gender.value!!
                     )
+//                    ,"2" to Share.Participant(
+//                        "uid",
+//                        "",
+//                        "test2",
+//                        "Female"
+//                    )
                 )
             )
             db.collection("shares").document(share.shareUid)
@@ -178,8 +184,12 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                viewModel.memberGender.value =
-                    binding.spinnerGender.getItemAtPosition(position).toString()
+                viewModel.memberGender.value = when (
+                    binding.spinnerGender.getItemAtPosition(position).toString()) {
+                    "동성만" -> userViewModel.gender.value!!
+                    "무관" -> "All"
+                    else -> "no"
+                }
             }
         }
 
