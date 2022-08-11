@@ -11,7 +11,7 @@ class MessageActivity : AppCompatActivity() {
     lateinit var datas: Share
     lateinit var profileDatas: HashMap<String, Share.Participant>
 
-    lateinit var profileAdapter: ProfileAdapter
+//    lateinit var profileAdapter: ProfileAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +29,8 @@ class MessageActivity : AppCompatActivity() {
 //        initProfileRecyclerView()
     }
 
-    private fun initProfileRecyclerView() {
-        profileAdapter = ProfileAdapter(this, profileDatas)
-        binding.messageActivityProfiles.adapter = profileAdapter
-    }
+//    private fun initProfileRecyclerView() {
+//        profileAdapter = ProfileAdapter(this, profileDatas)
+//        binding.messageActivityProfiles.adapter = profileAdapter
+//    }
 }
