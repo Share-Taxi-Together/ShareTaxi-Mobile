@@ -2,7 +2,6 @@ package com.example.sharedtaxitogether
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.sharedtaxitogether.adapter.ProfileAdapter
 import com.example.sharedtaxitogether.databinding.AcivityMessageBinding
 import com.example.sharedtaxitogether.model.Share
 
