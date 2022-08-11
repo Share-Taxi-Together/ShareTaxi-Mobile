@@ -52,8 +52,8 @@ class ShareListAdapter(private val context: Context) :
         fun bind(item: Share) {
 //            binding.listCreatorNickname.text = item.creatorNickname
             binding.listGender.text = item.memberGender
-            binding.listStart.text = item.start
-            binding.listDest.text = item.dest
+            binding.listStart.text = item.place["start"]?.id
+            binding.listDest.text = item.place["dest"]?.id
             //Todo participants 확인하기
             if (item.participants.isNotEmpty()) {
                 Log.d("here participants", item.participants["1"]?.nickname.toString())

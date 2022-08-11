@@ -17,8 +17,9 @@ class Share(
     var shareUid: String = "",  //db에 추가한 시간
     var memberCount: Int = 1,
 
-    var start: String = "",
-    var dest: String = "",
+//    var start: String = "",
+//    var dest: String = "",
+    var place: HashMap<String, Place> = HashMap(),
     var memberNum: String = "",
     var memberGender: String = "",
     var departTime: String = "",

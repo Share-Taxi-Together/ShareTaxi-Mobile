@@ -3,6 +3,7 @@ package com.example.sharedtaxitogether
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,7 +53,11 @@ class ListFragment : Fragment() {
                             }.run { mainActivity.startActivity(this) }
                         }
                         .setNegativeButton("경로확인") { _, _ ->
-
+                            val intent = Intent(context, ShowPathActivity::class.java)
+                            intent.putExtra("place", data)
+//                            intent.putExtra("start", data.start)
+//                            intent.putExtra("dest", data.dest)
+                            startActivity(intent)
                         }
                     builder.show()
                 } else {

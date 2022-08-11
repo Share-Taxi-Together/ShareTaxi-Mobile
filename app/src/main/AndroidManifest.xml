@@ -50,6 +50,10 @@
             android:exported="true">
 
         </activity>
+        <activity android:name=".ShowPathActivity"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>

@@ -30,8 +30,6 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class AddListFragment : Fragment() {
-    private val listFragment = ListFragment()
-
     private val api_key: String = BuildConfig.TMAP_API_KEY
     lateinit var tMapView: TMapView
 
@@ -60,6 +58,7 @@ class AddListFragment : Fragment() {
         binding = FragmentAddBinding.inflate(layoutInflater)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,11 +78,6 @@ class AddListFragment : Fragment() {
 
         binding.addListBtn.setOnClickListener {
             //todo 모든 항목 선택완료했는지 확인하기
-//            val creator = Share.Participant()
-//            creator.uid = userViewModel.uid.value!!
-//            creator.imgUrl = userViewModel.imgUrl.value!!
-//            creator.nickname = userViewModel.nickname.value!!
-//            creator.gender = userViewModel.gender.value!!
 
             val time = System.currentTimeMillis()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -92,8 +86,20 @@ class AddListFragment : Fragment() {
             val share = Share(
                 currentTime,
                 1,
-                viewModel.start.value!!,
-                viewModel.dest.value!!,
+                hashMapOf(
+                    "start" to Place(
+                        viewModel.start.value!!,
+                        viewModel.startAddress.value!!,
+                        viewModel.startLatitude.value!!,
+                        viewModel.startLongitude.value!!
+                    ),
+                    "dest" to Place(
+                        viewModel.dest.value!!,
+                        viewModel.destAddress.value!!,
+                        viewModel.destLatitude.value!!,
+                        viewModel.destLongitude.value!!
+                    )
+                ),
                 viewModel.memberNum.value!!,
                 viewModel.memberGender.value!!,
                 viewModel.time.value!!,
@@ -104,12 +110,6 @@ class AddListFragment : Fragment() {
                         userViewModel.nickname.value!!,
                         userViewModel.gender.value!!
                     )
-//                    ,"2" to Share.Participant(
-//                        "uid",
-//                        "",
-//                        "test2",
-//                        "Female"
-//                    )
                 )
             )
             db.collection("shares").document(share.shareUid)
@@ -117,7 +117,7 @@ class AddListFragment : Fragment() {
                 .addOnSuccessListener {
                     Log.d("here", "success save")
                     Toast.makeText(mainActivity, "목록에 추가되었습니다", Toast.LENGTH_SHORT).show()
-                    (activity as MainActivity).replaceFragment(listFragment)
+                    startActivity(Intent(mainActivity, MainActivity::class.java))
                 }
 //
 //            db.collection("shares").document(share.shareUid)
@@ -142,7 +142,6 @@ class AddListFragment : Fragment() {
                         tMapPolyLine.lineColor = Color.RED
                         tMapPolyLine.lineWidth = 5.0f
                         tMapView.addTMapPath(tMapPolyLine)
-//                        tMapView.addTMapPolyLine("line", tMapPolyLine)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -254,6 +253,7 @@ class AddListFragment : Fragment() {
                         binding.spinnerStart.getItemAtPosition(position).toString()
                     viewModel.startLongitude.value = placeList[position].longitude
                     viewModel.startLatitude.value = placeList[position].latitude
+                    viewModel.startAddress.value = placeList[position].address
                     binding.textStart.text = placeList[position].address
                 }
             }
@@ -271,6 +271,7 @@ class AddListFragment : Fragment() {
                         binding.spinnerDest.getItemAtPosition(position).toString()
                     viewModel.destLatitude.value = placeList[position].latitude
                     viewModel.destLongitude.value = placeList[position].longitude
+                    viewModel.destAddress.value = placeList[position].address
                     binding.textDest.text = placeList[position].address
                 }
             }
