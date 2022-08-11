@@ -9,6 +9,9 @@ class addInfoViewModel: ViewModel() {
     var destLongitude = MutableLiveData<String>()
     var destLatitude = MutableLiveData<String>()
 
+    var startAddress = MutableLiveData<String>()
+    var destAddress = MutableLiveData<String>()
+
     var start = MutableLiveData<String>()
     var dest = MutableLiveData<String>()
     var memberNum = MutableLiveData<String>()

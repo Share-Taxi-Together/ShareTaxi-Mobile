@@ -31,8 +31,6 @@ import java.util.*
 import kotlin.concurrent.thread
 
 class AddListFragment : Fragment() {
-    private val listFragment = ListFragment()
-
     private val api_key: String = BuildConfig.TMAP_API_KEY
     lateinit var tMapView: TMapView
 
@@ -61,6 +59,7 @@ class AddListFragment : Fragment() {
         binding = FragmentAddBinding.inflate(layoutInflater)
     }
 
+
     @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,25 +80,51 @@ class AddListFragment : Fragment() {
 
         binding.addListBtn.setOnClickListener {
             //todo 모든 항목 선택완료했는지 확인하기
+
+            val time = System.currentTimeMillis()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val currentTime = dateFormat.format(time).toString()
+
             val share = Share(
-                userViewModel.uid.value!!,
-                userViewModel.imgUrl.value!!,
-                userViewModel.nickname.value!!,
-                userViewModel.gender.value!!,
+                currentTime,
                 1,
-                viewModel.start.value!!,
-                viewModel.dest.value!!,
+                hashMapOf(
+                    "start" to Place(
+                        viewModel.start.value!!,
+                        viewModel.startAddress.value!!,
+                        viewModel.startLatitude.value!!,
+                        viewModel.startLongitude.value!!
+                    ),
+                    "dest" to Place(
+                        viewModel.dest.value!!,
+                        viewModel.destAddress.value!!,
+                        viewModel.destLatitude.value!!,
+                        viewModel.destLongitude.value!!
+                    )
+                ),
                 viewModel.memberNum.value!!,
                 viewModel.memberGender.value!!,
-                viewModel.time.value!!
+                viewModel.time.value!!,
+                hashMapOf(
+                    "1" to Share.Participant(
+                        userViewModel.uid.value!!,
+                        userViewModel.imgUrl.value!!,
+                        userViewModel.nickname.value!!,
+                        userViewModel.gender.value!!
+                    )
+                )
             )
-            db.collection("shares").document()
+            db.collection("shares").document(share.shareUid)
                 .set(share)
                 .addOnSuccessListener {
                     Log.d("here", "success save")
                     Toast.makeText(mainActivity, "목록에 추가되었습니다", Toast.LENGTH_SHORT).show()
-                    (activity as MainActivity).replaceFragment(listFragment)
+                    startActivity(Intent(mainActivity, MainActivity::class.java))
                 }
+//
+//            db.collection("shares").document(share.shareUid)
+//                .collection("participants").document(creator.uid!!).set(creator)
+//
         }
 
         binding.showRoute.setOnClickListener {
@@ -119,7 +144,6 @@ class AddListFragment : Fragment() {
                         tMapPolyLine.lineColor = Color.RED
                         tMapPolyLine.lineWidth = 5.0f
                         tMapView.addTMapPath(tMapPolyLine)
-//                        tMapView.addTMapPolyLine("line", tMapPolyLine)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -164,8 +188,12 @@ class AddListFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                viewModel.memberGender.value =
-                    binding.spinnerGender.getItemAtPosition(position).toString()
+                viewModel.memberGender.value = when (
+                    binding.spinnerGender.getItemAtPosition(position).toString()) {
+                    "동성만" -> userViewModel.gender.value!!
+                    "무관" -> "All"
+                    else -> "no"
+                }
             }
         }
 
@@ -230,6 +258,7 @@ class AddListFragment : Fragment() {
                         binding.spinnerStart.getItemAtPosition(position).toString()
                     viewModel.startLongitude.value = placeList[position].longitude
                     viewModel.startLatitude.value = placeList[position].latitude
+                    viewModel.startAddress.value = placeList[position].address
                     binding.textStart.text = placeList[position].address
                 }
             }
@@ -247,6 +276,7 @@ class AddListFragment : Fragment() {
                         binding.spinnerDest.getItemAtPosition(position).toString()
                     viewModel.destLatitude.value = placeList[position].latitude
                     viewModel.destLongitude.value = placeList[position].longitude
+                    viewModel.destAddress.value = placeList[position].address
                     binding.textDest.text = placeList[position].address
                 }
             }
