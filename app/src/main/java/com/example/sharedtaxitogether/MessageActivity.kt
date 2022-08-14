@@ -8,6 +8,7 @@ import com.example.sharedtaxitogether.adapter.MessageAdapter
 import com.example.sharedtaxitogether.databinding.AcivityMessageBinding
 import com.example.sharedtaxitogether.model.Chat
 import com.example.sharedtaxitogether.model.Share
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -47,21 +48,27 @@ class MessageActivity : AppCompatActivity() {
     }
 
     private fun onClickSendBtn() {
-        var msg = binding.messageActivityEditText.text.toString()
+        val msg = binding.messageActivityEditText.text.toString()
         //todo nickname 제대로 가져오기!!
-        var nickname = "0000"
+        val userUID = Firebase.auth.currentUser!!.uid
 
         if ("" == msg) return
 
-        var message = Chat.Comment(Firebase.auth.currentUser?.uid, nickname, msg)
-        Log.d("hhh", datas.shareUid)
-
-        db.collection("shares").document(datas.shareUid)
-            .collection("chat").document().set(message)
+        db.collection("users").document(userUID).get()
             .addOnSuccessListener {
-                binding.messageActivityEditText.setText("")
+                val nickname = it["nickname"].toString()
+
+                val message = Chat.Comment(Firebase.auth.currentUser?.uid, nickname, msg)
+                Log.d("hhh", datas.shareUid)
+
+                db.collection("shares").document(datas.shareUid)
+                    .collection("chat").document().set(message)
+                    .addOnSuccessListener {
+                        binding.messageActivityEditText.setText("")
+                    }
             }
     }
+
 
     private fun initMessageRecyclerView() {
         Log.d(TAG, "initMessageRecyclerView()")
