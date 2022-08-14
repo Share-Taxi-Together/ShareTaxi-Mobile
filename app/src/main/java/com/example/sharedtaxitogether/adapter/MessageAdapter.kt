@@ -26,6 +26,7 @@ class MessageAdapter(private val context: Context, shareUid: String) :
     init {
         // todo 채팅에 참여한 사람 정보 db에서 가져오기
         db.collection("shares").document(shareUid).collection("chat")
+            .orderBy("time")
             .addSnapshotListener { value, error ->
                 comments.clear()
 
@@ -40,7 +41,6 @@ class MessageAdapter(private val context: Context, shareUid: String) :
                 }
                 notifyDataSetChanged()
             }
-        // 메세지 내역 가져오기
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageItemViewHolder {
@@ -65,18 +65,16 @@ class MessageAdapter(private val context: Context, shareUid: String) :
     inner class MessageItemViewHolder(private val binding: ItemRecyclerMessageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(chat: Chat.Comment) {
-            if(chat.uid.equals(Firebase.auth.currentUser!!.uid)){
+            if (chat.uid.equals(Firebase.auth.currentUser!!.uid)) {
                 binding.messageItemProfile.visibility = View.INVISIBLE
-                binding.messageItemName.text = chat.nickname
-                binding.messageItemMessage.text = chat.message
                 binding.commentLinearLayout.gravity = Gravity.RIGHT
-            }else {
+            } else {
                 binding.commentLinearLayout.gravity = Gravity.LEFT
                 binding.messageItemProfile.setImageResource(R.drawable.default_profile)
-                binding.messageItemName.text = chat.nickname
-                binding.messageItemMessage.text = chat.message
             }
+            binding.messageItemTime.text = chat.time?.slice(11..15)
+            binding.messageItemName.text = chat.nickname
+            binding.messageItemMessage.text = chat.message
         }
     }
-
 }

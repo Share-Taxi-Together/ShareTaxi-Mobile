@@ -8,11 +8,13 @@ import com.example.sharedtaxitogether.adapter.MessageAdapter
 import com.example.sharedtaxitogether.databinding.AcivityMessageBinding
 import com.example.sharedtaxitogether.model.Chat
 import com.example.sharedtaxitogether.model.Share
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
 class MessageActivity : AppCompatActivity() {
     private lateinit var binding: AcivityMessageBinding
@@ -51,15 +53,14 @@ class MessageActivity : AppCompatActivity() {
         val msg = binding.messageActivityEditText.text.toString()
         //todo nickname 제대로 가져오기!!
         val userUID = Firebase.auth.currentUser!!.uid
-
+        var time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toString()
         if ("" == msg) return
 
         db.collection("users").document(userUID).get()
             .addOnSuccessListener {
                 val nickname = it["nickname"].toString()
 
-                val message = Chat.Comment(Firebase.auth.currentUser?.uid, nickname, msg)
-                Log.d("hhh", datas.shareUid)
+                val message = Chat.Comment(Firebase.auth.currentUser?.uid, nickname, msg, time)
 
                 db.collection("shares").document(datas.shareUid)
                     .collection("chat").document().set(message)
@@ -68,7 +69,6 @@ class MessageActivity : AppCompatActivity() {
                     }
             }
     }
-
 
     private fun initMessageRecyclerView() {
         Log.d(TAG, "initMessageRecyclerView()")
