@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sharedtaxitogether.adapter.MessageAdapter
+import com.example.sharedtaxitogether.adapter.ProfileAdapter
 import com.example.sharedtaxitogether.databinding.AcivityMessageBinding
 import com.example.sharedtaxitogether.model.Chat
 import com.example.sharedtaxitogether.model.Share
@@ -18,12 +19,12 @@ import kotlin.collections.HashMap
 
 class MessageActivity : AppCompatActivity() {
     private lateinit var binding: AcivityMessageBinding
-    lateinit var datas: Share
-    lateinit var profileDatas: HashMap<String, Share.Participant>
+    private lateinit var datas: Share
+    private lateinit var profileDatas: HashMap<String, Share.Participant>
     private lateinit var db: FirebaseFirestore
 
-    lateinit var messageAdapter: MessageAdapter
-//    lateinit var profileAdapter: ProfileAdapter
+    private lateinit var messageAdapter: MessageAdapter
+    private lateinit var profileAdapter: ProfileAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +35,10 @@ class MessageActivity : AppCompatActivity() {
 
         datas = intent.getSerializableExtra("data") as Share
         profileDatas = datas.participants
+        Log.d("profileDatas", datas.participants.size.toString())
 
         initMessageRecyclerView()
+        initProfileRecyclerView()
 
         // datas 에는 생성자 정보, 합승 정보, 참가자 정보
         binding.messageActivityStart.text = "출발 - ${datas.place["start"]?.id}"
@@ -71,17 +74,27 @@ class MessageActivity : AppCompatActivity() {
     }
 
     private fun initMessageRecyclerView() {
-        Log.d(TAG, "initMessageRecyclerView()")
         messageAdapter = MessageAdapter(this, datas.shareUid)
 
         binding.messageActivityRecyclerview.layoutManager = LinearLayoutManager(this)
         binding.messageActivityRecyclerview.adapter = messageAdapter
     }
 
-    //    private fun initProfileRecyclerView() {
-//        profileAdapter = ProfileAdapter(this, profileDatas)
-//        binding.messageActivityProfiles.adapter = profileAdapter
-//    }
+    private fun initProfileRecyclerView() {
+        var profileList = mutableListOf<Share.Participant>()
+
+        for (i in 1..profileDatas.size) {
+//            Log.d("here", profileDatas[i.toString()].toString())
+            profileList.add(profileDatas[i.toString()]!!)
+//            Log.d("for문 ${i}", profileList[i-1])
+        }
+
+        //index0이 생성자
+        profileAdapter = ProfileAdapter(this, profileList)
+
+        binding.messageActivityProfiles.adapter = profileAdapter
+    }
+
     companion object {
         private const val TAG = "MessageActivity/"
     }
