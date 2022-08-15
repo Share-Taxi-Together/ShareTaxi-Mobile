@@ -15,6 +15,11 @@ import com.example.sharedtaxitogether.adapter.ShareListAdapter
 import com.example.sharedtaxitogether.databinding.FragmentListBinding
 import com.example.sharedtaxitogether.model.Share
 import com.example.sharedtaxitogether.viewModel.LoginViewModel
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class ListFragment : Fragment() {
     lateinit var mainActivity: MainActivity
@@ -47,6 +52,7 @@ class ListFragment : Fragment() {
                     val builder = AlertDialog.Builder(mainActivity)
                     builder.setMessage("회원가입을 취소하시겠습니까?")
                         .setPositiveButton("입장하기") { _, _ ->
+                            addParticipants(data.shareUid, data.memberCount)
                             Intent(context, MessageActivity::class.java).apply {
                                 putExtra("data", data)
                                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -88,6 +94,36 @@ class ListFragment : Fragment() {
 //                listAdapter.notifyDataSetChanged()
 //            }
         binding.recyclerList.adapter = listAdapter
+    }
+
+    private fun addParticipants(shareUid: String, memberCount: Int){
+        val userUid = Firebase.auth.currentUser!!.uid
+        val db = FirebaseFirestore.getInstance()
+        db.collection("shares").document(shareUid).get()
+            .addOnSuccessListener {
+                if (it["makerUid"] != userUid){
+                    val participant = hashMapOf(
+                        "participants" to hashMapOf(
+                        "${memberCount+1}" to Share.Participant(
+                            userViewModel.uid.value!!,
+                            userViewModel.imgUrl.value!!,
+                            userViewModel.nickname.value!!,
+                            userViewModel.gender.value!!
+                        )
+                    ))
+
+                    db.collection("shares").document(shareUid)
+                        .set(participant, SetOptions.merge())
+                        .addOnSuccessListener {
+                            db.collection("shares").document(shareUid)
+                                .update("memberCount", memberCount+1)
+                            Toast.makeText(context,"목록에 추가됨",Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context,"failed",Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
     }
 
     private fun checkGender(memberGender: String): Boolean {
