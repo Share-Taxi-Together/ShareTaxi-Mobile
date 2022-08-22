@@ -21,6 +21,7 @@ class MessageActivity : AppCompatActivity() {
     private lateinit var binding: AcivityMessageBinding
     private lateinit var datas: Share
     private lateinit var profileDatas: HashMap<String, Share.Participant>
+    private lateinit var myProfileData: Share.Participant
     private lateinit var db: FirebaseFirestore
 
     private lateinit var messageAdapter: MessageAdapter
@@ -35,6 +36,14 @@ class MessageActivity : AppCompatActivity() {
 
         datas = intent.getSerializableExtra("data") as Share
         profileDatas = datas.participants
+//        for(i in 1..profileDatas.size){
+//            Log.d(TAG+"before", profileDatas[i.toString()]!!.nickname!!)
+//        }
+        if(intent.hasExtra("myProfile")){
+            myProfileData = intent.getSerializableExtra("myProfile") as Share.Participant
+            profileDatas["${profileDatas.size+1}"] = myProfileData
+        }
+
         Log.d("profileDatas", datas.participants.size.toString())
 
         initMessageRecyclerView()
@@ -56,7 +65,7 @@ class MessageActivity : AppCompatActivity() {
         val msg = binding.messageActivityEditText.text.toString()
         //todo nickname 제대로 가져오기!!
         val userUID = Firebase.auth.currentUser!!.uid
-        var time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toString()
+        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()).toString()
         if ("" == msg) return
 
         db.collection("users").document(userUID).get()
