@@ -51,7 +51,12 @@ class ShareListAdapter(private val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Share) {
 //            binding.listCreatorNickname.text = item.creatorNickname
-            binding.listGender.text = item.memberGender
+            when(item.memberGender){
+                "All" -> binding.listGender.text = "무관"
+                "Female" -> binding.listGender.text = "여자만"
+                "Male" -> binding.listGender.text = "남자만"
+            }
+//            binding.listGender.text = item.memberGender
             binding.listStart.text = item.place["start"]?.id
             binding.listDest.text = item.place["dest"]?.id
             //Todo participants 확인하기
