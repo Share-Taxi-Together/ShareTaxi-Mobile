@@ -1,7 +1,9 @@
 package com.example.sharedtaxitogether
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.icu.number.IntegerWidth
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +18,7 @@ import com.example.sharedtaxitogether.databinding.FragmentListBinding
 import com.example.sharedtaxitogether.model.Share
 import com.example.sharedtaxitogether.viewModel.LoginViewModel
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -52,11 +55,7 @@ class ListFragment : Fragment() {
                     val builder = AlertDialog.Builder(mainActivity)
                     builder.setMessage("회원가입을 취소하시겠습니까?")
                         .setPositiveButton("입장하기") { _, _ ->
-                            addParticipants(data.shareUid, data.memberCount)
-                            Intent(context, MessageActivity::class.java).apply {
-                                putExtra("data", data)
-                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            }.run { mainActivity.startActivity(this) }
+                            checkEntryAvailability(data.shareUid, data.memberCount, data.memberNum, data)
                         }
                         .setNegativeButton("경로확인") { _, _ ->
                             val intent = Intent(context, ShowPathActivity::class.java)
@@ -96,33 +95,64 @@ class ListFragment : Fragment() {
         binding.recyclerList.adapter = listAdapter
     }
 
-    private fun addParticipants(shareUid: String, memberCount: Int){
+    private fun checkEntryAvailability(shareUid: String, memberCount: Int, memberNum:String, data:Share){
         val userUid = Firebase.auth.currentUser!!.uid
         val db = FirebaseFirestore.getInstance()
         db.collection("shares").document(shareUid).get()
             .addOnSuccessListener {
                 if (it["makerUid"] != userUid){
-                    val participant = hashMapOf(
-                        "participants" to hashMapOf(
-                        "${memberCount+1}" to Share.Participant(
-                            userViewModel.uid.value!!,
-                            userViewModel.imgUrl.value!!,
-                            userViewModel.nickname.value!!,
-                            userViewModel.gender.value!!
-                        )
-                    ))
+                    for(i in 1..memberCount){
+                        val participantUid = it.get(FieldPath.of("participants","$i","uid"))
+                        if(participantUid == userUid) {
+                            Intent(context, MessageActivity::class.java).apply {
+                                putExtra("data", data)
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }.run { mainActivity.startActivity(this) }
+                            break
+                        }
+                        else{
+                            if(i<memberCount) continue
 
-                    db.collection("shares").document(shareUid)
-                        .set(participant, SetOptions.merge())
-                        .addOnSuccessListener {
-                            db.collection("shares").document(shareUid)
-                                .update("memberCount", memberCount+1)
-                            Toast.makeText(context,"목록에 추가됨",Toast.LENGTH_SHORT).show()
+                            if(memberCount >= Integer.parseInt(memberNum)){
+                                Toast.makeText(context, "최대 인원이 다 차서 입장할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                            } else{
+                                val participant = hashMapOf(
+                                    "participants" to hashMapOf(
+                                        "${memberCount+1}" to Share.Participant(
+                                            userViewModel.uid.value!!,
+                                            userViewModel.imgUrl.value!!,
+                                            userViewModel.nickname.value!!,
+                                            userViewModel.gender.value!!
+                                        )
+                                    ))
+
+                                db.collection("shares").document(shareUid)
+                                    .set(participant, SetOptions.merge())
+                                    .addOnSuccessListener {
+                                        db.collection("shares").document(shareUid)
+                                            .update("memberCount", memberCount+1)
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(context,"failed",Toast.LENGTH_SHORT).show()
+                                    }
+
+                                Intent(context, MessageActivity::class.java).apply {
+                                    putExtra("data", data)
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }.run { mainActivity.startActivity(this) }
+                            }
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(context,"failed",Toast.LENGTH_SHORT).show()
-                        }
+                    }
                 }
+                else{
+                    Intent(context, MessageActivity::class.java).apply {
+                        putExtra("data", data)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }.run { mainActivity.startActivity(this) }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(context,"실패",Toast.LENGTH_SHORT).show()
             }
     }
 
