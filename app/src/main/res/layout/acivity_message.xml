@@ -58,9 +58,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageActivity_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/messageActivity_editText"
         app:layout_constraintTop_toBottomOf="@id/messageActivity_profiles"
         tools:listitem="@layout/item_recycler_message" />
 
