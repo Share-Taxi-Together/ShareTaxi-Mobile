@@ -52,7 +52,7 @@ class MessageActivity : AppCompatActivity() {
         // datas 에는 생성자 정보, 합승 정보, 참가자 정보
         binding.messageActivityStart.text = "출발 - ${datas.place["start"]?.id}"
         binding.messageActivityDest.text = "도착 - ${datas.place["dest"]?.id}"
-        binding.messageActivityDepartTime.text = "출발시간 - ${datas.departTime}"
+        binding.messageActivityDepartTime.text = "출발시간 - ${datas.departTime.slice(11..15)}"
 
         binding.messageActivitySendBtn.setOnClickListener {
             onClickSendBtn()
@@ -90,7 +90,7 @@ class MessageActivity : AppCompatActivity() {
     }
 
     private fun initProfileRecyclerView() {
-        var profileList = mutableListOf<Share.Participant>()
+        val profileList = mutableListOf<Share.Participant>()
 
         for (i in 1..profileDatas.size) {
 //            Log.d("here", profileDatas[i.toString()].toString())
