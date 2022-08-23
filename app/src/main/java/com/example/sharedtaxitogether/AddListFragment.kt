@@ -281,7 +281,7 @@ class AddListFragment : Fragment() {
         val day = cal.get(Calendar.DAY_OF_MONTH)
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-            cal.set(year, month, day, Calendar.HOUR_OF_DAY, Calendar.MINUTE)
+            cal.set(year, month, day, hour, minute)
 
             binding.timeText.text = SimpleDateFormat("HH:mm").format(cal.time)
             viewModel.time.value = SimpleDateFormat("yyyy-MM-dd HH:mm").format(cal.time)
