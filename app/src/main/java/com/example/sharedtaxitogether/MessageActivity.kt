@@ -50,9 +50,9 @@ class MessageActivity : AppCompatActivity() {
         initProfileRecyclerView()
 
         // datas 에는 생성자 정보, 합승 정보, 참가자 정보
-        binding.messageActivityStart.text = "출발 - ${datas.place["start"]?.id}"
-        binding.messageActivityDest.text = "도착 - ${datas.place["dest"]?.id}"
-        binding.messageActivityDepartTime.text = "출발시간 - ${datas.departTime.slice(11..15)}"
+        binding.messageActivityStart.text = "${datas.place["start"]?.id}"
+        binding.messageActivityDest.text = "${datas.place["dest"]?.id}"
+        binding.messageActivityDepartTime.text = "(${datas.departTime.slice(11..15)})"
 
         binding.messageActivitySendBtn.setOnClickListener {
             onClickSendBtn()
