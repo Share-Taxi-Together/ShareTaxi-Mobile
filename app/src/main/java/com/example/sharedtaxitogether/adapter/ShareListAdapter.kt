@@ -9,12 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sharedtaxitogether.databinding.ItemRecyclerListBinding
 import com.example.sharedtaxitogether.model.Share
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
 
 class ShareListAdapter(private val context: Context) :
     RecyclerView.Adapter<ShareListAdapter.ListItemViewHolder>() {
     private val db = FirebaseFirestore.getInstance()
     private var currentList = mutableListOf<Share>()
 
+    private val currentTime = SimpleDateFormat("yyyy-MM-dd HH:mm").format(System.currentTimeMillis())
+    // 데이터 가져올 때 출발시간이 현재시간 이후인 데이터만 가져오기
     init {
         db.collection("shares")
             .orderBy("departTime")
@@ -22,8 +25,11 @@ class ShareListAdapter(private val context: Context) :
                 currentList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    val item = snapshot.toObject(Share::class.java)
-                    currentList.add(item!!)
+                    val date = snapshot["departTime"].toString()
+                    if(date > currentTime){
+                        val item = snapshot.toObject(Share::class.java)
+                        currentList.add(item!!)
+                    }
                 }
                 notifyDataSetChanged()
             }
@@ -64,7 +70,7 @@ class ShareListAdapter(private val context: Context) :
                 Log.d("here participants", item.participants["1"]?.nickname.toString())
             }
             binding.listMember.text = "${item.memberCount} / ${item.memberNum}"
-            binding.listTime.text = item.departTime
+            binding.listTime.text = item.departTime.slice(11..15)
 
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {

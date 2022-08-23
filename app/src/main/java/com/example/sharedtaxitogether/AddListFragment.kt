@@ -276,13 +276,15 @@ class AddListFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     private fun getTime() {
         val cal = Calendar.getInstance()
+        val year = cal.get(Calendar.YEAR)
+        val month = cal.get(Calendar.MONTH)
+        val day = cal.get(Calendar.DAY_OF_MONTH)
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-            cal.set(Calendar.HOUR_OF_DAY, hour)
-            cal.set(Calendar.MINUTE, minute)
+            cal.set(year, month, day, hour, minute)
 
             binding.timeText.text = SimpleDateFormat("HH:mm").format(cal.time)
-            viewModel.time.value = SimpleDateFormat("HH:mm").format(cal.time)
+            viewModel.time.value = SimpleDateFormat("yyyy-MM-dd HH:mm").format(cal.time)
         }
 
         TimePickerDialog(

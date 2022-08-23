@@ -6,40 +6,72 @@
     android:layout_height="match_parent"
     android:padding="10dp">
 
+    <ImageView
+        android:id="@+id/messageActivity_backBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_baseline_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/messageActivity_exitBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="2dp"
+        android:src="@drawable/exit_chatting_room"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/messageActivity_start"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="5dp"
         android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@id/messageActivity_dest"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/messageActivity_backBtn"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="출발지" />
 
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:src="@drawable/ic_baseline_arrow_right_alt_24"
+        app:layout_constraintBottom_toBottomOf="@id/messageActivity_start"
+        app:layout_constraintEnd_toStartOf="@id/messageActivity_dest"
+        app:layout_constraintStart_toEndOf="@id/messageActivity_start"
+        app:layout_constraintTop_toTopOf="@id/messageActivity_start" />
+
     <TextView
         android:id="@+id/messageActivity_dest"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="5dp"
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/messageActivity_departTime"
-        app:layout_constraintStart_toEndOf="@id/messageActivity_start"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow"
+        app:layout_constraintTop_toTopOf="@id/messageActivity_start"
         tools:text="도착지" />
 
     <TextView
         android:id="@+id/messageActivity_departTime"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="5dp"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/messageActivity_start"
+        app:layout_constraintEnd_toStartOf="@id/messageActivity_exitBtn"
         app:layout_constraintStart_toEndOf="@id/messageActivity_dest"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="출발시간" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -59,9 +91,9 @@
         android:id="@+id/messageActivity_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/messageActivity_editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/messageActivity_editText"
         app:layout_constraintTop_toBottomOf="@id/messageActivity_profiles"
         tools:listitem="@layout/item_recycler_message" />
 
